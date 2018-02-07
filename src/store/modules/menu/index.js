@@ -2,30 +2,12 @@ import * as types from '../../mutation-types'
 import problema from './problema'
 import profile from './profile'
 import submissao from './submissao'
-//
-import statistics from './statistics'
-import forms from './forms'
-import dashboard from './dashboard'
-import ui from './ui'
-import maps from './maps'
-import tables from './tables'
-import auth from './auth'
-import extra from './extra'
 
 const state = {
   items: [
     profile,
     problema,
-    submissao,
-    //
-    dashboard,
-    statistics,
-    forms,
-    tables,
-    ui,
-    extra,
-    auth,
-    maps
+    submissao
   ]
 }
 

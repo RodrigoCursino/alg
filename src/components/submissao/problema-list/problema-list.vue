@@ -14,7 +14,7 @@
                 <thead>
                 <tr>
                   <td>Título</td>
-                  <td align="right">Enviar Algoritmo</td>
+                  <td class="text-center">Enviar</td>
                   <td></td>
                 </tr>
                 </thead>
@@ -24,8 +24,8 @@
                   <td>
                     <button @click="problemaParaSubmissao(problema)" class="btn btn-primary btn-micro">
                       <div class="btn-with-icon-content">
-                        <span aria-hidden="true" class="fa fa-plus" style="font-size: 12px;"></span>
-                        adicionar
+                        <span aria-hidden="true" class="fa fa-upload" style="font-size: 12px;"></span>
+                        ENVIAR
                       </div>
                     </button>
                   </td>
