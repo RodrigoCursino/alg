@@ -121,7 +121,8 @@
 
     methods: {
       getAll () {
-        http.get('http://localhost:8084/alg-judge/rest/problema/list/10').then(response => {
+        http.get('http://localhost:8084/alg-judge/rest/problema/list/10'
+        ).then(response => {
           this.problemas = response.data
           this.quantidadeDePag()
         })

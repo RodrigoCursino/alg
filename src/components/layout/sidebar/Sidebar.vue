@@ -2,7 +2,9 @@
   <aside class="sidebar">
     <vuestic-scrollbar>
       <ul class="sidebar-menu">
-        <li v-for="(item, index) in menuItems" :key="item.name">
+        <!-- mostrar se o usuario for de acordo com a rota -->
+        <div>
+         <li v-for="(item, index) in menuItems" :key="item.name">
           <router-link
             class="sidebar-link"
             :to="item.path"
@@ -34,6 +36,7 @@
             </ul>
           </expanding>
         </li>
+        </div>
       </ul>
     </vuestic-scrollbar>
 

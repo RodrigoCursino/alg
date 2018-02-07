@@ -10,5 +10,17 @@ class User {
     }
     return data
   }
+
+  static BUILD_USER () {
+    const data = {
+      id: 1,
+      nome: 'admin',
+      senha: '123456',
+      email: 'admin@admin.com',
+      ativo: true,
+      papel: 'ALUNO'
+    }
+    return data
+  }
 }
 export default User

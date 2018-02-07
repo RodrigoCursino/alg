@@ -1,4 +1,5 @@
-import axios from 'axios'
+import http from 'axios'
+import swal from 'sweetalert'
 class ProblemaDao {
   static submitForm (form) {
     const data = {
@@ -13,18 +14,31 @@ class ProblemaDao {
     }
 
     return data
-  };
+  }
 
-  updateForm () {
-
-  };
-
-  static getAll () {
-    axios.get('http://localhost:8084/alg-judge/rest/problema/list/10').then(response => {
-      console.log('Get All', response.data)
-      return response.data
+  static update (problema) {
+    http.put('http://localhost:8084/alg-judge/rest/problema', problema).then(response => {
+      this.$emit('ok')
+      swal({
+        title: 'Problema atualizado!',
+        text: 'O problema foi editado com sucesso!!',
+        icon: 'success',
+        button: 'OK'
+      })
     })
   }
-};
+
+  static salvar (problema) {
+    http.post('http://localhost:8084/alg-judge/rest/problema', problema).then(response => {
+      this.$emit('ok')
+      swal({
+        title: 'Problema salvo com sucesso!',
+        text: 'O problema foi salvo com sucesso!!',
+        icon: 'success',
+        button: 'OK'
+      })
+    })
+  }
+}
 
 export default ProblemaDao

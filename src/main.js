@@ -4,7 +4,8 @@ import Vue from 'vue'
 import VeeValidate from 'vee-validate'
 import App from './App'
 import store from './store'
-import axios from 'axios'
+import Axios from 'axios'
+import Moment from 'moment'
 import swal from 'sweetalert'
 import router from './router'
 import { sync } from 'vuex-router-sync'
@@ -40,8 +41,11 @@ router.afterEach((to, from) => {
   store.commit('setLoading', false)
 })
 
+/* import moment js */
+window.moment = Moment
+
 /* import axios for request */
-window.axios = axios
+window.axios = Axios
 window.axios.defaults.headers.common = {
   'X-Requested-With': 'XMLHttpRequest'
 }

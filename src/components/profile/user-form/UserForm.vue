@@ -88,6 +88,7 @@
 
 <script>
   import Usuario from '../../../model/User'
+  import http from 'axios'
   export default {
     name: 'user-form',
     data () {
@@ -100,7 +101,30 @@
     },
     methods: {
       salvar () {
-        console.log('salvou')
+        const email = 'admin@admin.com'
+        const password = '123456'
+        console.log('email', btoa(email))
+        console.log('password', btoa(password))
+
+        var credentials = btoa(email + ':' + password)
+        var BasicAuth = 'Basic ' + credentials
+        http.post('http://localhost:8084/alg-judge/rest/usuario/admin', {
+          headers: {'Authorization': +BasicAuth}
+        }).then((response) => {
+          console.log('Authenticated')
+        })
+          .catch((error) => {
+            console.log('Error on Authentication', error)
+          })
+        /*
+        http.post('http://localhost:8084/alg-judge/rest/usuario/admin',
+          {auth: {username: btoa(email), email: btoa(password)}},
+          {headers: {'X-Requested-With': 'XMLHttpRequest'}}
+        ).then(response => {
+          console.log(response)
+          localStorage.setItem('token', response.data.token)
+        })
+        */
       }
     }
   }

@@ -1,6 +1,8 @@
 import * as types from '../../mutation-types'
 import problema from './problema'
 import profile from './profile'
+import submissao from './submissao'
+//
 import statistics from './statistics'
 import forms from './forms'
 import dashboard from './dashboard'
@@ -14,6 +16,8 @@ const state = {
   items: [
     profile,
     problema,
+    submissao,
+    //
     dashboard,
     statistics,
     forms,

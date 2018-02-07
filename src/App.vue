@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <auth-layout v-if="isAuth"></auth-layout>
+    <auth-layout v-if="user.login"></auth-layout>
     <layout v-else></layout>
   </div>
 </template>
@@ -16,6 +16,14 @@
       VuesticPreLoader,
       AuthLayout,
       Layout
+    },
+    data () {
+      return {
+        user: {
+          login: false,
+          papel: 'ALUNO'
+        }
+      }
     },
     computed: {
       isAuth () {
