@@ -1,83 +1,82 @@
 <template>
-  <div class="auth-layout">
-    <div class="nav d-lg-none"><router-link class="i-vuestic" :to="{path: '/'}"></router-link></div>
-    <div class="main row">
-      <div class="auth-content col-lg-6 col-12">
-        <router-view></router-view>
+  <div>
+    <div class="content">
+      <div class="title">
+        <h1>ALG JUDGE</h1>
       </div>
-      <div class="auth-wallpaper col-6 d-none d-lg-flex">
-        <div class="oblique"></div>
-        <router-link class="i-vuestic" :to="{path: '/'}"></router-link>
+      <div class="form">
+        <div class="form-group">
+          <div class="input-group">
+            <input v-model="user.nome" id="nome" required/>
+            <label class="control-label" for="nome">DIGITE SEU EMAIL</label><i class="bar"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input type="email" v-model="user.email" id="email" required/>
+            <label class="control-label" for="email">DIGITE SEU EMAIL</label><i class="bar"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input v-model="user.senha" type="password" id="senha" required/>
+            <label class="control-label" for="senha">DIGITE SUA SENHA</label><i class="bar"></i>
+          </div>
+        </div>
+        <button @click="login()" class="btn btn-success pull-right">ENTRAR</button>
+        <button @click="singUP()" class="btn btn-success pull-right">Sign</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import User from '../../model/User'
+  import UserDao from '../../dao/UserDao'
+
   export default {
-    name: 'AuthLayout'
+    name: 'AuthLayout',
+    data () {
+      return {
+        user: new User()
+      }
+    },
+    created () {
+      this.user = User.BUILD_FORM(this.user)
+    },
+    methods: {
+      login () {
+        this.user = UserDao.submitForm(this.user)
+        this.$emit('logado', this.user)
+      },
+      singUP () {
+        this.$emit('cadastro', this.user)
+      }
+    }
   }
 </script>
 
-<style lang="scss">
-  @import '../../sass/variables';
-  @import '../../../node_modules/bootstrap/scss/mixins/breakpoints';
-  @import "../../../node_modules/bootstrap/scss/functions";
-  @import '../../../node_modules/bootstrap/scss/variables';
-  .auth-layout {
-    height: 100%;
-    margin: 0;
-    .nav {
+<style scoped lang="scss">
+    .bg {
+      background-color: #128000;
+      color: #4ae387;
+    }
+    .title {
+      z-index: 999;
+    }
+    .content {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: $top-mobile-nav-height;
-      background-color: $top-nav-bg;
-      .i-vuestic {
-        height: $auth-mobile-nav-ivuestic-h;
-        width: 100%;
-      }
+      height: 100vh;
     }
-    .main {
-      margin: 0;
-      height: 100%;
-      .auth-content {
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: white;
-      }
-      .auth-wallpaper {
-        background-color: $top-nav-bg;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        .i-vuestic {
-          z-index: 2;
-          height: $auth-wallpaper-ivuestic-h;
-          width: 100%;
-        }
-        .oblique {
-          position: absolute;
-          background-color: $auth-wallpaper-oblique-line;
-          left: calc(50% - 27%/2);
-          transform: rotate(15deg);
-          width: 27%;
-          height: 115%;
-        }
-      }
+    .form {
+      width: 481px;
+      background: white;
+      padding: 50px;
+      border-radius: 5px 5px 5px 5px;
     }
-
-    @include media-breakpoint-down(md) {
-      .main {
-        height: $auth-mobile-main-h;
-        .auth-content {
-          align-items: flex-start;
-          padding-top: $auth-content-padding-t;
-        }
-      }
+    input {
+      width: 100%;
     }
-  }
 </style>

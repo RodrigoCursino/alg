@@ -11,12 +11,12 @@
         <div class="col-md-9 my_background">
           <div class="row">
             <div class="col-md-9 col-lg-9">
-               <h5> <i class="fa fa-arrow-circle-left"> </i> {{titulo()}}</h5>
+               <h5> <i v-show="submissao.problema != null" @click="voltarALista()" class="fa fa-arrow-circle-left"> </i> {{titulo()}}</h5>
             </div>
             <div class="col-md-3 col-lg-3">
-                <i v-if="view" @mouseover="mouseOver" @mouseout="mouseOut" class="fa fa-eye pull-right" style="font-size: 1.5em"></i>
+                <i v-if="problemaView" @click="problemaViewYes"  class="fa fa-eye-slash desabilitado pull-right" style="font-size: 1.5em"></i>
                 <span v-else-if="view === false && problemaView === false" @mouseout="mouseOut" @click="problemaViewDiv" class="pull-right">Visualizar Problema</span>
-                <i v-else-if="problemaView" @click="problemaViewYes" class="fa fa-eye-slash desabilitado pull-right" style="font-size: 1.5em"></i>
+                <i v-else-if="problemaView" v-if="view" @mouseover="mouseOver" @mouseout="mouseOut" class="fa fa-eye pull-right" style="font-size: 1.5em"></i>
             </div>
           </div>
           <hr>
@@ -31,13 +31,13 @@
               <div class="my_margin" v-html="submissao.problema.descricaoSaida"></div>
             </div>
           </div>
-          <div v-if="problemaView && submissao.problema === null" class="row">
+          <div v-if="problemaView || submissao.problema === null" class="row">
             <div class="col-md-12 col-lg-12">
-              <problema-list @problemaParaSubmissao="submissaoProblema"></problema-list>
+              <problema-list class="my_margin" @problemaParaSubmissao="submissaoProblema"></problema-list>
             </div>
           </div>
           <!-- Submeter -->
-          <div class="row" v-else>
+          <div class="row" v-show="submissao.problema != null">
             <div class="col-md-12 col-lg-12">
               <textarea v-model="submissao.codigoFonte" class="submissao_area" wrap="off" cols="30" rows="5"></textarea>
               <button @click="submeter(submissao)" class="btn btn-success pull-right">Enviar</button>
@@ -87,7 +87,7 @@
         if (this.submissao.problema === null) {
           return 'Listagem de Problemas'
         } else {
-          return this.submissao.problema.titulo
+          return 'Voltar á Lista, Título: ' + this.submissao.problema.titulo
         }
       },
       mouseOut () {
@@ -116,6 +116,9 @@
           }
           swal('Código Enviado', response.data.msg, icon)
         })
+      },
+      voltarALista () {
+        this.submissao.problema = null
       }
     }
   }

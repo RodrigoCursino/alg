@@ -13,7 +13,9 @@ import VuesticPlugin from 'src/components/vuestic-components/vuestic-components-
 import BootstrapVue from 'bootstrap-vue'
 import VuePaginate from 'vue-paginate'
 import './i18n'
+import VueParticles from 'vue-particles'
 
+Vue.use(VueParticles)
 Vue.use(VuesticPlugin)
 Vue.use(BootstrapVue)
 Vue.use(VuePaginate)
