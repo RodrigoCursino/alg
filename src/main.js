@@ -48,8 +48,20 @@ window.moment = Moment
 
 /* import axios for request */
 window.axios = Axios
-window.axios.defaults.headers.common = {
-  'X-Requested-With': 'XMLHttpRequest'
+
+const token = sessionStorage.getItem('token')
+
+if (token) {
+  console.log('Token ', token)
+  debugger
+  window.axios.defaults.headers.common = {
+    'Authorization': 'Bearer ' + token
+  }
+} else {
+  debugger
+  window.axios.defaults.headers.common = {
+    'X-Requested-With': 'XMLHttpRequest'
+  }
 }
 
 /* import axios for request */

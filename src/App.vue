@@ -21,11 +21,7 @@
     data () {
       return {
         logado: false,
-        user: {
-          email: '',
-          senha: '',
-          papel: 'ALUNO'
-        }
+        usuario: {}
       }
     },
     computed: {
@@ -36,11 +32,12 @@
     methods: {
       login (user) {
         http.get('http://localhost:8084/alg-judge/rest/usuario/login',
-          {auth: {email: user.email, senha: user.senha}}
+          {headers: {'Authorization': 'Basic ' + btoa(user.email + ':' + user.senha)}}
         ).then(response => {
+          sessionStorage.setItem('token', response.data.token)
           console.log('Login', response)
+          this.logado = true
         })
-        this.user.login = false
       },
       singUP (user) {
         http.post('http://localhost:8084/alg-judge/rest/usuario/signup', user,
