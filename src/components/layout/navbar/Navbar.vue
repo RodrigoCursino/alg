@@ -26,10 +26,7 @@
               <router-link v-bind:to="'Profile'">Profile</router-link>
             </div>
             <div class="dropdown-item plain-link-item">
-              <a class="plain-link" href="#" @click.prevent="showLanguageModal">{{'user.language' | translate}}</a>
-            </div>
-            <div class="dropdown-item plain-link-item">
-              <a class="plain-link" href="#">{{'user.logout' | translate}}</a>
+              <router-link v-bind:to="'auth'">Logout</router-link>
             </div>
           </div>
         </div>

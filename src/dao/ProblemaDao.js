@@ -3,8 +3,7 @@ import swal from 'sweetalert'
 class ProblemaDao {
   static submitForm (form) {
     const data = {
-
-      id: form.id ? form.id : null,
+      id: form.id ? form.id : 0,
       ativo: form.ativo ? form.ativo : null,
       descricao: form.descricao ? form.descricao : null,
       descricaoEntrada: form.descricaoEntrada ? form.descricaoEntrada : null,

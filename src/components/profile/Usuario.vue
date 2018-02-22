@@ -1,8 +1,9 @@
 <template>
   <div class="users-members-tab dashboard-tab">
     <div class="row">
+      {{userLogado}}
       <div class="col-md-3 d-flex justify-content-center align-items-center">
-        <vuestic-profile-card :name="'Veronique Lee'" :location="'Coxim, MS'" photoSource="http://i.imgur.com/NLrdqsk.png"
+        <vuestic-profile-card :name="user.nome" :location="'Coxim, MS'" photoSource="http://i.imgur.com/NLrdqsk.png"
                               :social="{twitter: 'twitter.com', facebook: 'facebook.com',
                                   instagram: 'instagram.com'}">
         </vuestic-profile-card>
@@ -20,6 +21,16 @@
     name: 'profile',
     components: {
       UserForm
+    },
+    computed: {
+      userLogado () {
+        this.user = this.$store.state.userState.user
+      }
+    },
+    data () {
+      return {
+        user: {}
+      }
     }
   }
 </script>

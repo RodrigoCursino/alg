@@ -300,6 +300,7 @@
         this.problema.id = 0
         const data = ProblemaDao.submitForm(problema)
         http.post('http://localhost:8084/alg-judge/rest/problema', data).then(response => {
+          console.log('id Problema', response.data.msg)
           this.getIdProblema(response.data.msg)
         })
       },
@@ -343,6 +344,7 @@
         this.salvarCasoDeTeste(this.casoDeTeste)
       },
       salvarCasoDeTeste (casoDeTeste) {
+        debugger
         const data = CasoDeTesteDao.submitForm(casoDeTeste)
         let id
         if (data.id === 0) {

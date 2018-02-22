@@ -1,21 +1,21 @@
 class User {
   static BUILD_FORM (user) {
     const data = {
+      id: user.id ? user.id : 0,
       nome: user.nome ? user.nome : null,
       email: user.email ? user.email : null,
-      senha: user.senha ? user.senha : null
+      senha: user.senha ? user.senha : null,
+      papel: user.papel ? user.papel : null
     }
     return data
   }
-
-  static BUILD_USER () {
+  static LOGIN (user) {
     const data = {
-      id: 1,
-      nome: 'admin',
-      senha: '123456',
-      email: 'admin@admin.com',
-      ativo: true,
-      papel: 'ALUNO'
+      id: user.id ? user.id : 0,
+      nome: user.nome ? user.nome : null,
+      email: user.email ? user.email : null,
+      papel: user.papel ? user.papel : null,
+      token: user.token ? user.token : null
     }
     return data
   }

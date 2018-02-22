@@ -10,34 +10,22 @@
         </div>
         <div class="col-md-9 my_background">
           <div class="row">
-            <div class="col-md-9 col-lg-9">
-               <h5> <i v-show="submissao.problema != null" @click="voltarALista()" class="fa fa-arrow-circle-left"> </i> {{titulo()}}</h5>
+            <div class="col-md-4 col-lg-4">
+              <strong>Problema</strong>
+              <b-card class="text-center my_margin">
+                <span>NOME DO PROBLEMA</span>
+              </b-card>
             </div>
-            <div class="col-md-3 col-lg-3">
-                <i v-if="problemaView" @click="problemaViewYes"  class="fa fa-eye-slash desabilitado pull-right" style="font-size: 1.5em"></i>
-                <span v-else-if="view === false && problemaView === false" @mouseout="mouseOut" @click="problemaViewDiv" class="pull-right">Visualizar Problema</span>
-                <i v-else-if="problemaView" v-if="view" @mouseover="mouseOver" @mouseout="mouseOut" class="fa fa-eye pull-right" style="font-size: 1.5em"></i>
-            </div>
-          </div>
-          <hr>
-          <!-- problema View -->
-          <div v-if="problemaView && submissao.problema != null" class="row">
-            <div class="col-md-12 col-lg-12">
-              <h6>Descrição</h6>
-              <div class="my_margin" v-html="submissao.problema.descricao"></div>
-              <h6>Entrada</h6>
-              <div class="my_margin" v-html="submissao.problema.descricaoEntrada"></div>
-              <h6>Saída</h6>
-              <div class="my_margin" v-html="submissao.problema.descricaoSaida"></div>
+            <div class="col-md-8 col-lg-8">
+              <b-nav class="pull-right">
+                <b-nav-item active>Active</b-nav-item>
+                <b-nav-item>Link</b-nav-item>
+                <b-nav-item>Another Link</b-nav-item>
+                <b-nav-item disabled>Disabled</b-nav-item>
+              </b-nav>
             </div>
           </div>
-          <div v-if="problemaView || submissao.problema === null" class="row">
-            <div class="col-md-12 col-lg-12">
-              <problema-list class="my_margin" @problemaParaSubmissao="submissaoProblema"></problema-list>
-            </div>
-          </div>
-          <!-- Submeter -->
-          <div class="row" v-show="submissao.problema != null">
+          <div class="row">
             <div class="col-md-12 col-lg-12">
               <textarea v-model="submissao.codigoFonte" class="submissao_area" wrap="off" cols="30" rows="5"></textarea>
               <button @click="submeter(submissao)" class="btn btn-success pull-right">Enviar</button>

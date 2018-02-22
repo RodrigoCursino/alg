@@ -8,7 +8,7 @@ import Axios from 'axios'
 import Moment from 'moment'
 import swal from 'sweetalert'
 import router from './router'
-import { sync } from 'vuex-router-sync'
+import {sync} from 'vuex-router-sync'
 import VuesticPlugin from 'src/components/vuestic-components/vuestic-components-plugin'
 import BootstrapVue from 'bootstrap-vue'
 import VuePaginate from 'vue-paginate'
@@ -52,13 +52,10 @@ window.axios = Axios
 const token = sessionStorage.getItem('token')
 
 if (token) {
-  console.log('Token ', token)
-  debugger
   window.axios.defaults.headers.common = {
     'Authorization': 'Bearer ' + token
   }
 } else {
-  debugger
   window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
   }
@@ -73,5 +70,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: {App}
 })
