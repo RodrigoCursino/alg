@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="app">
     <layout v-if="isLog"></layout>
-    <auth-layout v-else @logado="login" @cadastro="singUP" ></auth-layout>
+    <auth-layout v-else @logado="login" @cadastro="singUP"></auth-layout>
   </div>
 </template>
 
@@ -19,13 +19,22 @@
       AuthLayout,
       Layout
     },
+    data () {
+      return {
+        token: null,
+        user: {}
+      }
+    },
     computed: {
       isAuth () {
         return this.$route.path.match('auth')
       },
       isLog () {
-        return this.isLogado()
+        return this.token
       }
+    },
+    created () {
+      this.isLogado()
     },
     methods: {
       login (user) {
@@ -33,19 +42,16 @@
           {headers: {'Authorization': 'Basic ' + btoa(user.email + ':' + user.senha)}}
         ).then(response => {
           sessionStorage.setItem('token', response.data.token)
+          let jsonAux = JSON.stringify(response.data)
+          sessionStorage.setItem('user', jsonAux)
           this.usuarioLogado(response.data)
           this.isLogado()
-          console.log('Login', response)
-          this.logado = true
+          window.location.reload()
         })
       },
       isLogado () {
-        const token = sessionStorage.getItem('token')
-        if (token) {
-          return true
-        } else {
-          return false
-        }
+        this.token = sessionStorage.getItem('token')
+        this.$store.commit('USER_LOGADO', JSON.parse(sessionStorage.getItem('user')))
       },
       usuarioLogado (user) {
         const payload = User.LOGIN(user)

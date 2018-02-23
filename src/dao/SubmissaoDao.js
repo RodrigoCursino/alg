@@ -2,9 +2,9 @@ class SubmissaoDao {
   static submitForm (form) {
     const data = {
       id: form.id ? form.id : 0,
-      usuario: form.usuario ? form.usuario : null,
+      usuario: JSON.parse(sessionStorage.getItem('user')),
       codigoFonte: replaceCodigo(form.codigoFonte) ? form.codigoFonte : null,
-      dataEnvio: new Date().getTime(),
+      dataEnvio: form.dataEnvio ? form.dataEnvio : null,
       ativo: form.ativo ? form.ativo : true,
       tempoExecucao: 33,
       situacao: 'Em Execução',

@@ -2,28 +2,33 @@
   <div class="dashboard">
     <div class="row">
       <div class="col-md-12">
-        <vuestic-tabs :names="[$t('Todos Problemas'),$t('Novo Problema')]" ref="tabs">
-          <div :slot="$t('Todos Problemas')">
-            <problema-list></problema-list>
-          </div>
-          <div :slot="$t('Novo Problema')">
-            <problema-form></problema-form>
-          </div>
-        </vuestic-tabs>
+        <div class="my_background">
+          <aluno v-show="papel === 'Aluno'"></aluno>
+          <professor v-show="papel === 'Professor'"></professor>
+          <admin v-show="papel === 'Administrador'"></admin>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import ProblemaForm from './problema-form/ProblemaForm'
-  import ProblemaList from './problema-list/ProblemaList'
+
+  import Aluno from './aluno/Aluno'
+  import Professor from './professor/Professor'
+  import Admin from './admin/Admin'
 
   export default {
     name: 'problema',
     components: {
-      ProblemaForm,
-      ProblemaList
+      Aluno,
+      Professor,
+      Admin
+    },
+    computed: {
+      papel () {
+        return this.$store.state.userState.user.papel
+      }
     },
     data () {
       return {

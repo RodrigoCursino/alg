@@ -14,38 +14,48 @@
               <thead>
               <tr>
                 <td>Título</td>
-                <td>Edit</td>
-                <td>Delete</td>
-                <td align="right">Adicionar um Caso de Teste</td>
-                <td></td>
+                <div v-show="papel != 'Aluno'">
+                  <td>Edit</td>
+                  <td>Delete</td>
+                  <td align="right">Adicionar um Caso de Teste</td>
+                </div>
+                <td v-show="papel === 'Aluno'" align="right">Visualizar Problema</td>
               </tr>
               </thead>
               <tbody>
               <tr v-for="problema in paginated('problemas')">
                 <td>{{problema.titulo}}</td>
-                <td>
-                    <button @click="editProblema(problema)" class="btn btn-info btn-micro">
-                      <div class="btn-with-icon-content">
-                        <span aria-hidden="true" class="fa fa-edit" style="font-size: 12px;"></span>
-                      </div>
-                    </button>
-                </td>
-                <td>
-                  <button @click="deleteProblema(problema)" class="btn btn-danger btn-micro">
+                <div v-show="papel != 'Aluno'">
+                    <td>
+                        <button @click="editProblema(problema)" class="btn btn-info btn-micro">
+                          <div class="btn-with-icon-content">
+                            <span aria-hidden="true" class="fa fa-edit" style="font-size: 12px;"></span>
+                          </div>
+                        </button>
+                    </td>
+                    <td>
+                      <button @click="deleteProblema(problema)" class="btn btn-danger btn-micro">
+                        <div class="btn-with-icon-content">
+                          <span aria-hidden="true" class="fa fa-trash" style="font-size: 12px;"></span>
+                        </div>
+                      </button>
+                    </td>
+                    <td align="right" style="text-align:right">
+                      <button @click="addCasoDeTeste(problema.id)" class="btn btn-primary btn-micro">
+                        <div class="btn-with-icon-content">
+                          <span aria-hidden="true" class="fa fa-plus" style="font-size: 12px;"></span>
+                          adicionar
+                        </div>
+                      </button>
+                    </td>
+                </div>
+                <td v-show="papel === 'Aluno'" align="right" style="text-align:right">
+                  <button @click="submeterProblema(problema.id)" class="btn btn-primary btn-micro">
                     <div class="btn-with-icon-content">
-                      <span aria-hidden="true" class="fa fa-trash" style="font-size: 12px;"></span>
+                      submeter
                     </div>
                   </button>
                 </td>
-                <td align="right" style="text-align:right">
-                  <button @click="addCasoDeTeste(problema.id)" class="btn btn-primary btn-micro">
-                    <div class="btn-with-icon-content">
-                      <span aria-hidden="true" class="fa fa-plus" style="font-size: 12px;"></span>
-                      adicionar
-                    </div>
-                  </button>
-                </td>
-                <td></td>
               </tr>
               </tbody>
             </table>
@@ -100,6 +110,11 @@
       CasoModal,
       ProblemaCadastro
     },
+    computed: {
+      papel () {
+        return this.$store.state.userState.user.papel
+      }
+    },
     data () {
       return {
         problemas: [],
@@ -114,16 +129,17 @@
         show: false
       }
     },
-
-    created () {
+    mounted () {
       this.getAll()
     },
-
     methods: {
       getAll () {
-        http.get('http://localhost:8084/alg-judge/rest/problema/list/10'
+        const token = sessionStorage.getItem('token')
+        http.get('http://localhost:8084/alg-judge/rest/problema/list',
+          {headers: {'Authorization': 'Bearer ' + token}}
         ).then(response => {
-          this.problemas = response.data
+          console.log('Response Problem List', response.data.data)
+          this.problemas = response.data.data
           this.quantidadeDePag()
         })
       },
@@ -153,7 +169,11 @@
         console.log('Problema Edit', this.problema)
         this.$refs.largeModal.open()
       },
-
+      submeterProblema (id) {
+        http.get('http://localhost:8084/alg-judge/rest/problema/' + id).then(response => {
+          this.$emit('submeterProblema', response.data.data)
+        })
+      },
       addCasoDeTeste (id) {
         this.problemaId = id
         this.$refs.casoModal.open()
