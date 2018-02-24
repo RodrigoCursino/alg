@@ -14,19 +14,19 @@
       </div>
 
       <div class="offset-lg-8"></div>
-      <div class="col nav-item dropdown navbar-dropdown d-flex align-items-center justify-content-center" v-dropdown>
+      <div class="col nav-item dropdown navbar-dropdown d-flex align-items-center justify-content-end" v-dropdown>
         <a class="nav-link dropdown-toggle d-flex align-items-center justify-content" href="#" @click.prevent="closeMenu">
           <span class="avatar-container">
-            <img src="http://i.imgur.com/nfa5itq.png" />
+            <img src="../../../assets/img/avatar1.png" />
           </span>
         </a>
         <div class="dropdown-menu last">
           <div class="dropdown-menu-content">
             <div class="dropdown-item plain-link-item">
-              <router-link v-bind:to="'Profile'">Profile</router-link>
+              <router-link :to="'Profile'">Profile</router-link>
             </div>
             <div class="dropdown-item plain-link-item">
-              <router-link v-bind:to="'auth'">Logout</router-link>
+              <span @click="logout()">Logout</span>
             </div>
           </div>
         </div>
@@ -75,6 +75,11 @@
         'toggleSidebar',
         'isToggleWithoutAnimation'
       ]),
+      logout () {
+        sessionStorage.setItem('token', '')
+        sessionStorage.setItem('user', '')
+        window.location.reload()
+      },
       showLanguageModal () {
         this.$refs.languageModal.open()
       },

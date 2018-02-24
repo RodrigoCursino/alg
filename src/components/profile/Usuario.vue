@@ -2,11 +2,14 @@
   <div class="users-members-tab dashboard-tab">
     <div class="row">
       {{userLogado}}
-      <div class="col-md-3 d-flex justify-content-center align-items-center">
-        <vuestic-profile-card :name="user.nome" :location="'Coxim, MS'" photoSource="http://i.imgur.com/NLrdqsk.png"
-                              :social="{twitter: 'twitter.com', facebook: 'facebook.com',
-                                  instagram: 'instagram.com'}">
-        </vuestic-profile-card>
+      <div class="col-md-3 d-flex justify-content-center align-items-start">
+        <div class="card" style="width: 50rem;">
+          <img src="../../assets/img/avatar1.png" class="card-img-top" width="100%" />
+          <div class="card-block" style="padding: 20px">
+            <h5 class="card-title"><i class="fa fa-user-circle-o"></i>{{'  ' + user.nome}}</h5>
+            <span class="card-text"><i class="fa fa-envelope-o"></i>{{'  ' + user.email}}</span>
+          </div>
+        </div>
       </div>
       <div class="col-md-9 d-flex my_dashboard">
          <user-form></user-form>
@@ -38,7 +41,7 @@
 <style scoped>
   .my_dashboard{
     padding: 50px;
-    margin-top: 18px;
+    margin-top: 2px;
     background-color: white;
   }
 </style>

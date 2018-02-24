@@ -19,7 +19,7 @@
                   <td>Delete</td>
                   <td align="right">Adicionar um Caso de Teste</td>
                 </div>
-                <td v-show="papel === 'Aluno'" align="right">Visualizar Problema</td>
+                <td v-show="papel === 'Aluno'" align="right"></td>
               </tr>
               </thead>
               <tbody>
@@ -50,9 +50,10 @@
                     </td>
                 </div>
                 <td v-show="papel === 'Aluno'" align="right" style="text-align:right">
-                  <button @click="submeterProblema(problema.id)" class="btn btn-primary btn-micro">
+                  <button @click="submeterProblema(problema.id)" class="btn btn-success btn-micro">
                     <div class="btn-with-icon-content">
-                      submeter
+                      <i class="fa fa-eye"></i>
+                      <span class="">Vizualizar</span>
                     </div>
                   </button>
                 </td>
@@ -219,6 +220,4 @@
     padding: 0 2rem;
     height: 24rem;
   }
-
-
 </style>

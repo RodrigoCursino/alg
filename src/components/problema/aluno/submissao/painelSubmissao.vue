@@ -50,10 +50,10 @@
       },
       methods: {
         submeter (submissao) {
-          this.submissao.problema = new ProblemaDao.submitForm(this.problema)
+          this.submissao.problema = new ProblemaDao.SUBMIT_FORM(this.problema)
           this.submissao = SubmissaoDao.submitForm(submissao)
           http.post('http://localhost:8084/alg-judge/rest/submissao', this.submissao).then((response) => {
-            console.log('Submetido', response)
+            this.$emit('submetido')
             let icon
             if (response.data.msg === 'Aceito') {
               icon = 'success'

@@ -63,19 +63,6 @@
         </small>
       </div>
       </div>
-
-      <!--photo-->
-      <div class="form-group form-group-w-btn">
-        <div class="input-group">
-          <input
-            id="input-w-btn"
-            required="required">
-          <label for="input-w-btn" class="control-label">
-            EDITE A FOTO DO SEU PROFILE
-          </label>
-          <i class="bar"></i>
-        </div>
-        <div class="btn btn-micro btn-primary">UPLOAD</div></div>
     </fieldset>
     <button
       @click="salvar()"
