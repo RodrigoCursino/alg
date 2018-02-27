@@ -3,7 +3,9 @@
     <div class="row">
       <div class="col-md-6">
         <div class="chart-container">
-          <vuestic-chart :data="chart" type="donut"></vuestic-chart>
+          <vuestic-chart :data="chart" type="donut">
+            {{situacaoSubmissao}}
+          </vuestic-chart>
         </div>
       </div>
       <div class="col-md-6">
@@ -21,9 +23,9 @@
     name: 'data-visualisation-tab',
     props: {
       dados: {required: true},
-      aceito: {required: true, default: 0},
-      sintax: {required: true, default: 0},
-      erro: {required: true, default: 0}
+      aceito: {required: true},
+      sintax: {required: true},
+      erro: {required: true}
     },
     components: {
       SubmissaoList
@@ -35,16 +37,37 @@
           datasets: [{
             label: 'Population (millions)',
             backgroundColor: [store.getters.palette.danger, store.getters.palette.warning, store.getters.palette.primary],
-            data: [2, 2, 2]
+            data: [this.erro, this.sintax, this.aceito]
           }]
-        }
+        },
+        certo: 0,
+        erroSintax: 0,
+        respostaErrada: 0
       }
     },
     computed: {
+      situacaoSubmissao () {
+        for (let item of this.dados) {
+          switch (item.situacao) {
+            case 'Aceito':
+              this.certo++
+              break
+            case 'Erro de Sintax':
+              this.erroSintax++
+              break
+            default:
+              this.respostaErrada++
+              break
+          }
+          this.atualizarGrafico()
+        }
+      }
+    },
+    mounted () {
     },
     methods: {
       atualizarGrafico () {
-        this.chart.datasets[0].data = [this.erro, this.sintax, this.aceito]
+        this.chart.datasets[0].data = [this.respostaErrada, this.erroSintax, this.certo]
       }
     }
   }

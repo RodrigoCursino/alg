@@ -72,7 +72,7 @@
         return {
           paginate: ['submissoes'],
           page: 1,
-          pageTotal: 10,
+          pageTotal: 7,
           pageP: false,
           pageA: true,
           total: 0,
