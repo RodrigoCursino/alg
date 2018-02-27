@@ -1,82 +1,86 @@
 <template>
-  <div>
-    <div class="content">
-      <div class="title">
-        <h1>ALG JUDGE</h1>
+      <div class="d-flex flex-row justify-content-center align-items-center">
+        <div class="box align-self-center p-2 bd-highlight">
+          <login
+            v-show="!cadastro"
+            @logado="login"
+            @criarConta="cadastrar"
+          >
+          </login>
+          <signup
+            v-show="cadastro"
+            @cadastro="cadastrado"
+          >
+          </signup>
+        </div>
       </div>
-      <div class="form">
-        <div class="form-group">
-          <div class="input-group">
-            <input v-model="user.nome" id="nome" required/>
-            <label class="control-label" for="nome">DIGITE SEU EMAIL</label><i class="bar"></i>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="input-group">
-            <input type="email" v-model="user.email" id="email" required/>
-            <label class="control-label" for="email">DIGITE SEU EMAIL</label><i class="bar"></i>
-          </div>
-        </div>
-        <div class="form-group">
-          <div class="input-group">
-            <input v-model="user.senha" type="password" id="senha" required/>
-            <label class="control-label" for="senha">DIGITE SUA SENHA</label><i class="bar"></i>
-          </div>
-        </div>
-        <button @click="login()" class="btn btn-success pull-right">ENTRAR</button>
-        <button @click="singUP()" class="btn btn-success pull-right">Sign</button>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
   import User from '../../model/User'
+  import Login from '../auth/login/Login'
+  import Signup from '../auth/signup/Signup'
   import UserDao from '../../dao/UserDao'
 
   export default {
     name: 'AuthLayout',
+    components: {
+      Login,
+      Signup
+    },
     data () {
       return {
-        user: new User()
+        user: new User(),
+        cadastro: false
       }
+    },
+    computed: {
     },
     created () {
       this.user = User.BUILD_FORM(this.user)
     },
     methods: {
-      login () {
-        this.user = UserDao.submitForm(this.user)
+      login (user) {
+        this.cadastroRealizado = false
+        this.user = UserDao.submitForm(user)
         this.$emit('logado', this.user)
       },
-      singUP () {
-        this.$emit('cadastro', this.user)
+      cadastrado (user) {
+        this.cadastro = false
+        this.$emit('cadastro', user)
+      },
+      cadastrar () {
+        this.cadastro = true
       }
     }
   }
 </script>
 
 <style scoped lang="scss">
-    .bg {
-      background-color: #128000;
-      color: #4ae387;
+    .box {
+      background-color: rgba(255, 244, 247, 0.9);
+      margin-top: 21vh;
+      border-radius: 8px 8px 8px 8px;
+      width: 40%;
+      margin-bottom: auto;
     }
-    .title {
-      z-index: 999;
+
+    @media screen and (max-width: 900px){
+      .box {
+        width: 50%;
+      }
     }
-    .content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+
+
+    @media screen and (max-width: 700px){
+      .box {
+        width: 70%;
+      }
     }
-    .form {
-      width: 481px;
-      background: white;
-      padding: 50px;
-      border-radius: 5px 5px 5px 5px;
-    }
-    input {
-      width: 100%;
+
+    @media screen and (max-width: 500px){
+      .box {
+        width: 90%;
+      }
     }
 </style>

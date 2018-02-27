@@ -1,3 +1,4 @@
+
 export default {
   user: {
     id: '',
@@ -6,6 +7,7 @@ export default {
     papel: '',
     token: ''
   },
+  submissoes: [],
   problema: {
     id: '',
     titulo: '',
@@ -13,5 +15,6 @@ export default {
     ativo: '',
     descricaoEntrada: '',
     descricaoSaida: ''
-  }
+  },
+  userLogado: false
 }

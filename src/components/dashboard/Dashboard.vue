@@ -1,5 +1,7 @@
 <template>
-  <div class="dashboard">
+  <div>
+    <!--
+      <div class="dashboard">
     <div class="row">
       <div class="col-md-12">
         <vuestic-alert type="success" :withCloseBtn="true">
@@ -32,10 +34,14 @@
     <dashboard-bottom-widgets></dashboard-bottom-widgets>
 
   </div>
+    -->
+    <aluno-dashboard v-if="papel === 'Aluno'"></aluno-dashboard>
+  </div>
 </template>
 
 <script>
   import DashboardInfoWidgets from './DashboardInfoWidgets'
+  import AlunoDashboard from './AlunoDashboard'
   import UsersMembersTab from './users-and-members-tab/UsersMembersTab.vue'
   import SetupProfileTab from './setup-profile-tab/SetupProfileTab.vue'
   import FeaturesTab from './features-tab/FeaturesTab.vue'
@@ -46,11 +52,17 @@
     name: 'dashboard',
     components: {
       DataVisualisationTab,
+      AlunoDashboard,
       DashboardInfoWidgets,
       UsersMembersTab,
       SetupProfileTab,
       FeaturesTab,
       DashboardBottomWidgets
+    },
+    computed: {
+      papel () {
+        return this.$store.state.userState.user.papel
+      }
     }
   }
 </script>

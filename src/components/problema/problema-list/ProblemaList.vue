@@ -135,9 +135,7 @@
     },
     methods: {
       getAll () {
-        const token = sessionStorage.getItem('token')
-        http.get('http://localhost:8084/alg-judge/rest/problema/list',
-          {headers: {'Authorization': 'Bearer ' + token}}
+        http.get('http://localhost:8084/alg-judge/rest/problema/list'
         ).then(response => {
           console.log('Response Problem List', response.data.data)
           this.problemas = response.data.data

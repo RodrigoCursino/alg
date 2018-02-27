@@ -65,10 +65,10 @@
       </div>
     </fieldset>
     <button
-      @click="salvar()"
+      @click="atualizar()"
       type="button"
       class="btn btn-success pull-right">
-      Salvar
+      ATUALIZAR
     </button>
   </div>
 </template>
@@ -76,6 +76,7 @@
 <script>
   import Usuario from '../../../model/User'
   import http from 'axios'
+  import swal from 'sweetalert'
   export default {
     name: 'user-form',
     data () {
@@ -84,34 +85,30 @@
       }
     },
     created () {
-      this.user = Usuario.BUILD_FORM(this.user)
+      let senha = this.user.senha
+      this.user = Usuario.BUILD_FORM(this.$store.state.userState.user)
+      this.user.senha = senha
     },
     methods: {
-      salvar () {
-        const email = 'admin@admin.com'
-        const password = '123456'
-        console.log('email', btoa(email))
-        console.log('password', btoa(password))
-
-        var credentials = btoa(email + ':' + password)
-        var BasicAuth = 'Basic ' + credentials
-        http.post('http://localhost:8084/alg-judge/rest/usuario/admin', {
-          headers: {'Authorization': +BasicAuth}
-        }).then((response) => {
-          console.log('Authenticated')
-        })
-          .catch((error) => {
-            console.log('Error on Authentication', error)
+      atualizar () {
+        http.put('http://localhost:8084/alg-judge/rest/usuario', this.user).then((response) => {
+          this.userAtualizado(response.data)
+          swal({
+            title: 'OK!',
+            text: 'Usuário atualizado com sucesso',
+            icon: 'success'
           })
-        /*
-        http.post('http://localhost:8084/alg-judge/rest/usuario/admin',
-          {auth: {username: btoa(email), email: btoa(password)}},
-          {headers: {'X-Requested-With': 'XMLHttpRequest'}}
-        ).then(response => {
-          console.log(response)
-          localStorage.setItem('token', response.data.token)
+        }).catch((error) => {
+          console.log('Error', error)
         })
-        */
+      },
+      userAtualizado (dados) {
+        sessionStorage.setItem('token', dados.token)
+        let jsonAux = JSON.stringify(dados)
+        sessionStorage.setItem('user', jsonAux)
+        const payload = Usuario.LOGIN(dados)
+        this.$store.commit('USER_LOGADO', payload)
+        this.user = dados
       }
     }
   }

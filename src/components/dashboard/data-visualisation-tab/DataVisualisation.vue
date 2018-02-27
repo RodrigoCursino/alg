@@ -3,52 +3,48 @@
     <div class="row">
       <div class="col-md-6">
         <div class="chart-container">
-          <vuestic-chart v-bind:data="donutChartData" type="donut"></vuestic-chart>
+          <vuestic-chart :data="chart" type="donut"></vuestic-chart>
         </div>
       </div>
       <div class="col-md-6">
-        <vuestic-data-table :apiMode="apiMode"
-                    :data="tableData"
-                    :tableFields="tableFields"
-                    :itemsPerPage="itemsPerPage"
-                    :onEachSide="onEachSide"
-                    :sortFunctions="sortFunctions"
-                    :paginationPath="paginationPath">
-        </vuestic-data-table>
+        <submissao-list :mostrar="false" :list="dados"></submissao-list>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import Vue from 'vue'
-  import BadgeColumn from 'components/tables/BadgeColumn.vue'
-  import LocalData from 'components/vuestic-components/vuestic-datatable/data/local-data'
-  import DonutChartData from './DonutChartData'
-  import FieldsDef from './fields-definition'
-
-  Vue.component('badge-column', BadgeColumn)
+  import store from 'vuex-store'
+  import SubmissaoList from '../../problema/aluno/submissao/listSubmissao'
 
   export default {
     name: 'data-visualisation-tab',
-
+    props: {
+      dados: {required: true},
+      aceito: {required: true, default: 0},
+      sintax: {required: true, default: 0},
+      erro: {required: true, default: 0}
+    },
+    components: {
+      SubmissaoList
+    },
     data () {
       return {
-        donutChartData: DonutChartData,
-        apiMode: false,
-        sortFunctions: FieldsDef.sortFunctions,
-        tableData: LocalData.data,
-        onEachSide: 1,
-        tableFields: FieldsDef.tableFields,
-        paginationPath: 'pagination',
-        itemsPerPage: [
-          {
-            value: 5
-          },
-          {
-            value: 6
-          }
-        ]
+        chart: {
+          labels: ['Erros', 'Erro de Sintax', 'Aceitos'],
+          datasets: [{
+            label: 'Population (millions)',
+            backgroundColor: [store.getters.palette.danger, store.getters.palette.warning, store.getters.palette.primary],
+            data: [2, 2, 2]
+          }]
+        }
+      }
+    },
+    computed: {
+    },
+    methods: {
+      atualizarGrafico () {
+        this.chart.datasets[0].data = [this.erro, this.sintax, this.aceito]
       }
     }
   }

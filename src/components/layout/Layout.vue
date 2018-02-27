@@ -1,14 +1,14 @@
 <template>
-  <div :class="classObject" v-resize>
-    <navbar></navbar>
-    <sidebar></sidebar>
-    <div class="content-wrap" id="content-wrap">
-      <main id="content" class="content" role="main">
-        <vuestic-pre-loader v-show="isLoading" ref="preLoader" class="pre-loader"></vuestic-pre-loader>
-        <router-view v-show="!isLoading"></router-view>
-      </main>
+    <div :class="classObject" v-resize>
+      <navbar></navbar>
+      <sidebar></sidebar>
+      <div class="content-wrap" id="content-wrap">
+        <main id="content" class="content" role="main">
+          <vuestic-pre-loader v-show="isLoading" ref="preLoader" class="pre-loader"></vuestic-pre-loader>
+          <router-view v-show="!isLoading"></router-view>
+        </main>
+      </div>
     </div>
-  </div>
 </template>
 
 <script>

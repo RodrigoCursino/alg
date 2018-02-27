@@ -1,32 +1,51 @@
 <template>
   <div class="login">
-    <h2>{{'auth.welcome' | translate}}</h2>
-    <form method="post" action="/auth/login" name="login">
+    <h2>ALG JUDGE</h2>
+    <fieldset>
       <div class="form-group">
         <div class="input-group">
-          <input type="text" id="email" required="required"/>
+          <input type="text" v-model="user.email" id="email" required="required"/>
           <label class="control-label" for="email">{{'auth.email' | translate}}</label><i class="bar"></i>
         </div>
       </div>
       <div class="form-group">
         <div class="input-group">
-          <input type="password" id="password" required="required"/>
+          <input type="password" v-model="user.senha" id="password" required="required"/>
           <label class="control-label" for="password">{{'auth.password' | translate}}</label><i class="bar"></i>
         </div>
       </div>
-      <div class="d-flex flex-column flex-lg-row align-items-center justify-content-between down-container">
-        <button class="btn btn-primary" type="submit">
+      <div class="d-flex flex-column flex-lg-row flex-md-column  align-items-center justify-content-between down-container">
+        <button class="btn btn-primary" @click="login()" type="submit">
           {{'auth.login' | translate}}
         </button>
-        <router-link class='link' :to="{name: 'Signup'}">{{'auth.createAccount' | translate}}</router-link>
+        <button @click="criarConta" class="btn btn-dark btn-micro">Criar Conta</button>
       </div>
-    </form>
+    </fieldset>
   </div>
 </template>
 
 <script>
+  import User from '../../../model/User'
+  import UserDao from '../../../dao/UserDao'
   export default {
-    name: 'login'
+    name: 'login',
+    data () {
+      return {
+        user: new User()
+      }
+    },
+    created () {
+      this.user = User.BUILD_FORM(this.user)
+    },
+    methods: {
+      login () {
+        this.user = UserDao.submitForm(this.user)
+        this.$emit('logado', this.user)
+      },
+      criarConta () {
+        this.$emit('criarConta')
+      }
+    }
   }
 </script>
 
@@ -38,22 +57,22 @@
   .login {
     @include media-breakpoint-down(md) {
       width: 100%;
-      padding-right: 2rem;
-      padding-left: 2rem;
       .down-container {
         .link {
           margin-top: 2rem;
         }
       }
     }
-
     h2 {
       text-align: center;
     }
-    width: 21.375rem;
-
+    width: 100%;
+    padding: 50px;
     .down-container {
       margin-top: 3.125rem;
+    }
+    .text_success{
+      color: #169208;
     }
   }
 </style>

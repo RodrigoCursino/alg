@@ -32,19 +32,6 @@
         </div>
       </div>
     </div>
-    <vuestic-modal ref="languageModal"
-     v-bind:small="true" :okClass="'none'" :cancelClass="'none'">
-      <div slot="title">{{'user.language' | translate}}</div>
-      <div class="text-center">
-              <button class="btn btn-info" @click="setLanguage('en')">
-                {{'language.english' | translate}}
-              </button>
-              <hr>
-              <button class="btn btn-info" @click="setLanguage('es')">
-                {{'language.spanish' | translate}}
-              </button>
-      </div>
-    </vuestic-modal>
   </nav>
 </template>
 
@@ -76,9 +63,9 @@
         'isToggleWithoutAnimation'
       ]),
       logout () {
-        sessionStorage.setItem('token', '')
-        sessionStorage.setItem('user', '')
         window.location.reload()
+        sessionStorage.clear()
+        this.$router.replace('Login')
       },
       showLanguageModal () {
         this.$refs.languageModal.open()

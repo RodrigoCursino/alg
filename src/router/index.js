@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Login from '../components/layout/AuthLayout'
 
 import menuModule from 'vuex-store/modules/menu'
 
@@ -8,6 +9,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     ...generateRoutesFromMenu(menuModule.state.items),
+    {path: '/login', name: 'Login', component: Login},
     {path: '*', redirect: { name: getDefaultRoute(menuModule.state.items).name }}
   ]
 })

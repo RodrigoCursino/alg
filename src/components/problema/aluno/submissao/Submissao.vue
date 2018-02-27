@@ -29,6 +29,7 @@
     import ViewProblema from './viewProblema'
     import PainelSubmissao from './painelSubmissao'
     import ListSubmissao from './listSubmissao'
+    import http from 'axios'
     export default {
       name: 'submissao',
       components: {
@@ -61,6 +62,12 @@
           this.$emit('voltar')
         },
         listarSubmissoes () {
+          http.get('http://localhost:8084/alg-judge/rest/submissao/list').then(response => {
+            console.log('Response ', response.data.data)
+            this.submissoes = response.data.data
+            this.$store.commit('SUBMETIDO', this.submissoes)
+            this.listSubmissao = true
+          })
         }
       }
     }

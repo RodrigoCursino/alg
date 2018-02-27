@@ -1,58 +1,53 @@
 <template>
   <div class="row dashboard-info-widgets">
     <div class="col-md-6 col-xl-3">
-      <vuestic-widget class="info-widget">
+      <vuestic-widget class="info-widget brand-success">
         <div class="info-widget-inner">
           <div class="stats">
             <div class="stats-number">
               <i class="ion ion-arrow-up-c text-primary stats-icon"></i>
-              59
+              {{aceito}}
             </div>
-            <div class="stats-title">{{'dashboard.elements' | translate}}</div>
+            <div class="stats-title">RESPOSTAS CERTAS</div>
           </div>
         </div>
       </vuestic-widget>
     </div>
     <div class="col-md-6 col-xl-3">
-      <vuestic-widget class="info-widget">
-        <div class="info-widget-inner">
+      <vuestic-widget class="info-widget brand-warning">
+        <div class="danger-widget-inner">
           <div class="stats">
             <div class="stats-number">
-              <i class="ion ion-arrow-down-c text-danger stats-icon"></i>
-              12
+              <i class="ion ion-android-people stats-icon icon-wide"></i>
+              {{sintax}}
             </div>
-            <div class="stats-title">{{'dashboard.versions' | translate}}</div>
+            <div class="stats-title text-center">ERRO DE SINTAX</div>
           </div>
         </div>
       </vuestic-widget>
     </div>
     <div class="col-md-6 col-xl-3">
       <vuestic-widget class="info-widget brand-danger">
-        <div class="info-widget-inner">
-          <div class="info-widget-inner has-chart">
-            <div class="stats">
-              <div class="stats-number">
-                425
-              </div>
-              <div class="stats-title">Commits</div>
+        <div class="danger-widget-inner">
+          <div class="stats">
+            <div class="stats-number">
+              <i class="ion ion-android-people stats-icon icon-wide"></i>
+              {{erro}}
             </div>
-            <div class="chart-container">
-              <vuestic-progress-bar type="circle" ref="circleProgress" :colorName="'white'" :backgroundColorName="'danger'"
-                            :startColorName="'danger'"></vuestic-progress-bar>
-            </div>
+            <div class="stats-title">RESPOSTAS ERRADAS</div>
           </div>
         </div>
       </vuestic-widget>
     </div>
     <div class="col-md-6 col-xl-3">
       <vuestic-widget class="info-widget brand-info">
-        <div class="info-widget-inner">
+        <div class="danger-widget-inner">
           <div class="stats">
             <div class="stats-number">
               <i class="ion ion-android-people stats-icon icon-wide"></i>
-              5
+              {{envios}}
             </div>
-            <div class="stats-title">{{'dashboard.teamMembers' | translate}}</div>
+            <div class="stats-title text-center">ENVIADOS</div>
           </div>
         </div>
       </vuestic-widget>
@@ -63,9 +58,11 @@
 <script>
   export default {
     name: 'dashboard-info-widgets',
-
-    mounted () {
-      this.$refs.circleProgress.$data.value = 70
+    props: {
+      aceito: {required: true},
+      sintax: {required: true},
+      erro: {required: true},
+      envios: {required: true}
     }
   }
 </script>
@@ -96,6 +93,15 @@
       align-items: center;
       height: 100%;
     }
+  }
+
+  .brand-warning {
+    background: #ffe718;
+  }
+
+  .brand-success {
+    background: #169208;
+    color: white;
   }
 
   .stats-number {

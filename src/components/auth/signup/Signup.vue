@@ -1,38 +1,51 @@
 <template>
   <div class="signup">
-    <h2>{{'auth.createNewAccount' | translate}}</h2>
-    <form method="post" action="/auth/signup" name="signup">
+    <h2>Criar Conta</h2>
+    <fieldset>
       <div class="form-group">
         <div class="input-group">
-          <input type="text" id="email" required="required"/>
-          <label class="control-label" for="email">{{'auth.email' | translate}}</label><i class="bar"></i>
+          <input v-model="user.nome" type="text" id="nome" required="required"/>
+          <label class="control-label" for="nome">DIGITE SEU NOME</label><i class="bar"></i>
         </div>
       </div>
       <div class="form-group">
         <div class="input-group">
-          <input type="password" id="password" required="required"/>
-          <label class="control-label" for="password">{{'auth.password' | translate}}</label><i class="bar"></i>
+          <input v-model="user.email" type="text" id="email-sg" required="required"/>
+          <label class="control-label" for="email-sg">DIGITE SEU EMAIL</label><i class="bar"></i>
         </div>
       </div>
-      <div class="form-check abc-checkbox abc-checkbox-primary">
-        <input class="form-check-input" id="checkbox1" type="checkbox" checked>
-        <label class="form-check-label" for="checkbox1">
-          <span class="abc-label-text">{{'auth.agree' | translate}} <router-link to="">{{'auth.termsOfUse' | translate}}</router-link></span>
-        </label>
+      <div class="form-group">
+        <div class="input-group">
+          <input v-model="user.senha" type="password" id="password-sg" required="required"/>
+          <label class="control-label" for="password-sg">{{'auth.password' | translate}}</label><i class="bar"></i>
+        </div>
       </div>
-      <div class="d-flex flex-column flex-lg-row align-items-center justify-content-between down-container">
-        <button class="btn btn-primary" type="submit">
-          {{'auth.signUp' | translate}}
+      <div class="d-flex flex-column flex-lg-row align-items-end justify-content-end down-container">
+        <button @click="singup" class="btn btn-primary" type="submit">
+          Cadastrar
         </button>
-        <router-link class='link' :to="{name: 'Login'}">{{'auth.alreadyJoined' | translate}}</router-link>
       </div>
-    </form>
+    </fieldset>
   </div>
 </template>
 
 <script>
+  import User from '../../../model/User'
   export default {
-    name: 'signup'
+    name: 'signup',
+    data () {
+      return {
+        user: new User()
+      }
+    },
+    created () {
+      this.user = User.BUILD_FORM(this.user)
+    },
+    methods: {
+      singup () {
+        this.$emit('cadastro', this.user)
+      }
+    }
   }
 </script>
 
@@ -57,7 +70,8 @@
     h2 {
       text-align: center;
     }
-    width: 21.375rem;
+    width: 100%;
+    padding: 50px;
 
     .down-container {
       margin-top: 2.6875rem;

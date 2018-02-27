@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="app">
-    <layout v-if="isLog"></layout>
-    <auth-layout v-else @logado="login" @cadastro="singUP"></auth-layout>
+    <layout v-if="token"></layout>
+    <auth-layout v-else class="body_login" @logado="login" @cadastro="singUP"></auth-layout>
   </div>
 </template>
 
@@ -9,6 +9,7 @@
   import Layout from 'components/layout/Layout'
   import http from 'axios'
   import User from './model/User'
+  import swal from 'sweetalert'
   import AuthLayout from './components/layout/AuthLayout'
   import VuesticPreLoader from './components/vuestic-components/vuestic-preloader/VuesticPreLoader.vue'
 
@@ -21,48 +22,66 @@
     },
     data () {
       return {
-        token: null,
+        token: this.$store.state.userState.user.token,
         user: {}
       }
     },
     computed: {
       isAuth () {
         return this.$route.path.match('auth')
-      },
-      isLog () {
-        return this.token
       }
     },
-    created () {
-      this.isLogado()
+    watch: {
+      token: () => {
+        if (this.token) {
+          return true
+        } else {
+          return false
+        }
+      }
     },
     methods: {
       login (user) {
         http.get('http://localhost:8084/alg-judge/rest/usuario/login',
           {headers: {'Authorization': 'Basic ' + btoa(user.email + ':' + user.senha)}}
         ).then(response => {
+          this.$router.replace('dashboard')
           sessionStorage.setItem('token', response.data.token)
           let jsonAux = JSON.stringify(response.data)
           sessionStorage.setItem('user', jsonAux)
+          this.token = response.data.token
           this.usuarioLogado(response.data)
-          this.isLogado()
-          window.location.reload()
         })
-      },
-      isLogado () {
-        this.token = sessionStorage.getItem('token')
-        this.$store.commit('USER_LOGADO', JSON.parse(sessionStorage.getItem('user')))
       },
       usuarioLogado (user) {
         const payload = User.LOGIN(user)
         this.$store.commit('USER_LOGADO', payload)
+        this.$store.commit('USER_LOGIN')
+        this.setToken()
       },
       singUP (user) {
         http.post('http://localhost:8084/alg-judge/rest/usuario/signup', user,
         {headers: {'Content-Type': 'application/json', 'Accept': '*/*', 'Cache-Control': 'no-cache'}}
         ).then(response => {
-          console.log('Cadastro', response)
+          console.log('User ', response.data)
+          swal({
+            title: 'OK!',
+            text: response.data.msg,
+            icon: 'success'
+          })
+        }).catch(error => {
+          swal({
+            title: 'Há um Erro!',
+            text: 'possivelmente há um usuário cadastrado com esse mesmo email',
+            icon: 'warning'
+          })
+          console.log('Error ', error)
         })
+      },
+      setToken () {
+        http.defaults.headers.common = {
+          'Authorization': 'Bearer ' + this.token
+        }
       }
     }
   }
@@ -70,6 +89,11 @@
 
 <style lang="scss">
   @import "sass/main";
+  .body_login {
+    background: url("./assets/img/background.jpg");
+    background-size: cover;
+    height: 100%;
+  }
   body {
     height: 100%;
     .app {

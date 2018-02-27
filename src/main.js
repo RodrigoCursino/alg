@@ -14,6 +14,7 @@ import BootstrapVue from 'bootstrap-vue'
 import VuePaginate from 'vue-paginate'
 import './i18n'
 import VueParticles from 'vue-particles'
+import User from './model/User'
 
 Vue.use(VueParticles)
 Vue.use(VuesticPlugin)
@@ -50,18 +51,19 @@ window.moment = Moment
 window.axios = Axios
 
 const token = sessionStorage.getItem('token')
-
 if (token) {
+  const payload = User.LOGIN(JSON.parse(sessionStorage.getItem('user')))
+  store.commit('USER_LOGADO', payload)
+  store.commit('USER_LOGIN')
+  console.log('tem token')
   window.axios.defaults.headers.common = {
     'Authorization': 'Bearer ' + token
   }
 } else {
-  window.axios.defaults.headers.common = {
-    'X-Requested-With': 'XMLHttpRequest'
-  }
+  console.log('não tem token')
 }
 
-/* import axios for request */
+/* import sweetalert for request */
 window.swal = swal
 
 /* eslint-disable no-new */
