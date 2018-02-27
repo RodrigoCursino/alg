@@ -2,9 +2,9 @@
   <div class="data-visualisation-tab dashboard-tab">
     <div class="row">
       <div class="col-md-6">
+        {{situacaoSubmissao}}
         <div class="chart-container">
           <vuestic-chart :data="chart" type="donut">
-            {{situacaoSubmissao}}
           </vuestic-chart>
         </div>
       </div>
@@ -39,35 +39,34 @@
             backgroundColor: [store.getters.palette.danger, store.getters.palette.warning, store.getters.palette.primary],
             data: [this.erro, this.sintax, this.aceito]
           }]
-        },
-        certo: 0,
-        erroSintax: 0,
-        respostaErrada: 0
+        }
       }
     },
     computed: {
       situacaoSubmissao () {
+        this.zerarGrafico()
         for (let item of this.dados) {
           switch (item.situacao) {
             case 'Aceito':
-              this.certo++
+              this.chart.datasets[0].data[2]++
               break
             case 'Erro de Sintax':
-              this.erroSintax++
+              this.chart.datasets[0].data[1]++
               break
             default:
-              this.respostaErrada++
+              this.chart.datasets[0].data[0]++
               break
           }
-          this.atualizarGrafico()
         }
       }
     },
     mounted () {
     },
     methods: {
-      atualizarGrafico () {
-        this.chart.datasets[0].data = [this.respostaErrada, this.erroSintax, this.certo]
+      zerarGrafico () {
+        this.chart.datasets[0].data[2] = 0
+        this.chart.datasets[0].data[1] = 0
+        this.chart.datasets[0].data[0] = 0
       }
     }
   }

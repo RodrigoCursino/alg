@@ -1,16 +1,16 @@
 <template>
   <div class="dashboard">
+    {{situacaoSubmissao}}
     <dashboard-info-widgets
       :sintax="sintax"
       :erro="erro"
       :aceito="aceito"
       :envios="submissoes.length"
     >
-      {{situacaoSubmissao}}
     </dashboard-info-widgets>
-    <div class="my_background">
+    <div v-if="submissoes.length > 0" class="my_background">
       <data-visualisation-tab
-        :dados="this.$store.state.userState.submissoes"
+        :dados="submissoes"
         :sintax="sintax"
         :erro="erro"
         :aceito="aceito"

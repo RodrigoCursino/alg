@@ -91,6 +91,9 @@
     },
     methods: {
       atualizar () {
+        let senha = this.user.senha
+        this.user = Usuario.BUILD_FORM(this.$store.state.userState.user)
+        this.user.senha = senha
         http.put('http://localhost:8084/alg-judge/rest/usuario', this.user).then((response) => {
           this.userAtualizado(response.data)
           swal({
