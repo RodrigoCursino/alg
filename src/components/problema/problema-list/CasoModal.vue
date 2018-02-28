@@ -80,7 +80,7 @@
             <!--Footer-->
             <div class="modal-footer">
               <slot name="footer">
-                <button type="button" :class="okClass" @click="ok">{{okText}}</button>
+                <button type="button" :disabled="entradas.length = 0" :class="okClass" @click="ok">{{okText}}</button>
                 <button type="button" :class="cancelClass" @click="cancel">{{cancelText}}</button>
               </slot>
             </div>
@@ -213,21 +213,16 @@
             this.casoDeTeste.entrada += this.entradas[entrada]
           }
         }
-
-        this.casoDeTeste.problema = ProblemaDao.submitForm(this.casoDeTeste.problema)
+        this.casoDeTeste.problema = ProblemaDao.SUBMIT_FORM(this.casoDeTeste.problema)
         this.salvarCasoDeTeste(this.casoDeTeste)
       },
       salvarCasoDeTeste (casoDeTeste) {
         const data = CasoDeTesteDao.submitForm(casoDeTeste)
-        let id
         debugger
         if (data.id === 0) {
           http.post('http://localhost:8084/alg-judge/rest/casodeteste', data).then(
             response => {
-              console.log('Casos De Teste Salvo', response.data.msg)
-              id = response.data.msg
-              id = id.split('id=')
-              casoDeTeste.id = parseInt(id[1])
+              casoDeTeste.id = response.data.data.id
               this.casos.push(casoDeTeste)
               this.clean()
             }
@@ -272,8 +267,8 @@
       },
       getProblema (id) {
         http.get('http://localhost:8084/alg-judge/rest/problema/' + id).then(response => {
-          this.problema = response.data
-          this.problema = ProblemaDao.submitForm(this.problema)
+          this.problema = response.data.data
+          this.problema = ProblemaDao.SUBMIT_FORM(this.problema)
           this.casoDeTeste.problema = this.problema
           console.log('Get Problema', response)
         })
@@ -281,8 +276,8 @@
       getCasos () {
         http.get('http://localhost:8084/alg-judge/rest/casodeteste/listarcasos/' + this.problemaId)
           .then(response => {
-            this.casos = response.data
-            console.log('Casos De Teste', response.data)
+            this.casos = response.data.data
+            console.log('Casos De Teste', response.data.data)
           })
       },
       delCasos (caso) {

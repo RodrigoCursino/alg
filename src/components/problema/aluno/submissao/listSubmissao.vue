@@ -39,19 +39,17 @@
        </div>
      </div>
        <div class="row" v-show="mostrar">
-         <div class="col-lg-12 col-md-12 d-flex flex-row-reverse">
-           <button @click="voltar" class="btn btn-info">
-             VOLTAR
-           </button>
-         </div>
-       </div>
-       <div class="row">
-         <div class="col-md-12 col-lg-12">
-           <div role="group" aria-label="First group" class="btn-group pull-right">
-             <button @click="anterior()" :disabled="pageA" type="button" class="btn btn-info">Anterior</button>
-             <button @click="proximo()" :disabled="pageP" type="button" class="btn btn-info">Próximo</button>
+           <div class="col-lg-6 col-md-6 pull-left">
+             <button @click="voltar" class="btn btn-info">
+               VOLTAR
+             </button>
            </div>
-         </div>
+           <div class="col-md-6 col-lg-6">
+             <div role="group" aria-label="First group" class="btn-group pull-right">
+               <button @click="anterior()" :disabled="pageA" type="button" class="btn btn-primary">Anterior</button>
+               <button @click="proximo()" :disabled="pageP" type="button" class="btn btn-primary">Próximo</button>
+             </div>
+           </div>
        </div>
   </div>
 </template>

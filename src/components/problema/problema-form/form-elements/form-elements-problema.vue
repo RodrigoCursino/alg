@@ -3,7 +3,6 @@
     <div class="col-md-12">
       <div class="no-h-padding" :headerText="$t('forms.wizard.simple')">
         <vuestic-wizard :steps="hsSteps">
-
           <!-- Problema -->
           <div slot="page1" class="form-wizard-tab-content">
             <fieldset class="my_fieldset">
@@ -50,7 +49,7 @@
           </div>
           <!-- Caso de Teste -->
           <div slot="page2" class="form-wizard-tab-content">
-            <div v-if="problemaId > 0" class="my_fieldset">
+            <div v-if="problemaId" class="my_fieldset">
               <caso-de-teste-list @editCaso="editarCasoDeTeste" :casos="casos"></caso-de-teste-list>
               <fieldset class="my_fieldset my_margin">
                 <div class="form-group">
@@ -127,7 +126,6 @@
             <h5 class="text-center">Casos de teste Relacionados</h5>
             <caso-de-teste-list :casos="casos"></caso-de-teste-list>
           </div>
-
         </vuestic-wizard>
       </div>
     </div>
@@ -139,6 +137,7 @@
 
   import {VueEditor} from 'vue2-editor'
   import http from 'axios'
+  import FormProblema from './formProblema'
   import Problema from '../../../../model/Problema'
   import ProblemaDao from '../../../../dao/ProblemaDao'
   import CasoDeTeste from '../../../../model/CasoDeTeste'
@@ -151,6 +150,7 @@
     name: 'form-elements-problema',
     components: {
       FormSimple,
+      FormProblema,
       VueEditor,
       Problema,
       Spinner,
@@ -267,13 +267,14 @@
           {
             label: this.$t('forms.wizard.stepThree'),
             slot: 'page3'
-          }
+          },
+          this.goTO()
         ]
       }
     },
     data () {
       return {
-        problemaId: 0,
+        problemaId: false,
         entradas: [],
         problema: new Problema(),
         casoDeTeste: new CasoDeTeste(),
@@ -298,18 +299,11 @@
       },
       saveProblema (problema) {
         this.problema.id = 0
-        const data = ProblemaDao.submitForm(problema)
+        const data = ProblemaDao.SUBMIT_FORM(problema)
         http.post('http://localhost:8084/alg-judge/rest/problema', data).then(response => {
-          console.log('id Problema', response.data.msg)
-          this.getIdProblema(response.data.msg)
+          console.log('Problema', response.data)
+          this.getProblema(response.data.data.id)
         })
-      },
-      getIdProblema (id) {
-        this.problemaId = id
-        this.problemaId = this.problemaId.split('id=')
-        this.casoDeTeste.id = 0
-        this.problemaId = parseInt(this.problemaId[1])
-        this.getProblema(this.problemaId)
       },
       addEntrada (entrada) {
         this.entradas.push(entrada)
@@ -340,20 +334,17 @@
             this.casoDeTeste.entrada += this.entradas[entrada]
           }
         }
-        this.casoDeTeste.problema = ProblemaDao.submitForm(this.casoDeTeste.problema)
+        this.casoDeTeste.problema = ProblemaDao.SUBMIT_FORM(this.casoDeTeste.problema)
         this.salvarCasoDeTeste(this.casoDeTeste)
       },
       salvarCasoDeTeste (casoDeTeste) {
         debugger
         const data = CasoDeTesteDao.submitForm(casoDeTeste)
-        let id
         if (data.id === 0) {
           http.post('http://localhost:8084/alg-judge/rest/casodeteste', data).then(
             response => {
-              console.log('Casos De Teste Salvo', response.data.msg)
-              id = response.data.msg
-              id = id.split('id=')
-              casoDeTeste.id = parseInt(id[1])
+              console.log('Casos De Teste Salvo', response.data.data)
+              casoDeTeste.id = response.data.data.id
               this.casos.push(casoDeTeste)
               this.clean()
             }
@@ -366,7 +357,9 @@
               this.casos.push(casoDeTeste)
               this.clean()
             }
-          )
+          ).catch(erro => {
+            console.log('Erro', erro)
+          })
         }
       },
       clean () {
@@ -378,10 +371,10 @@
       },
       getProblema (id) {
         http.get('http://localhost:8084/alg-judge/rest/problema/' + id).then(response => {
-          this.problema = response.data
-          this.problema = ProblemaDao.submitForm(this.problema)
+          this.problema = ProblemaDao.SUBMIT_FORM(response.data.data)
           this.casoDeTeste.problema = this.problema
-          console.log('Get Problema', response)
+          this.problemaId = true
+          console.log('Get Problema', this.problema)
         })
       },
       delCasos (caso) {

@@ -58,7 +58,7 @@
 
 <style scoped lang="scss">
     .box {
-      background-color: rgba(255, 244, 247, 0.9);
+      background-color: rgba(255, 255, 255, 0.9);
       margin-top: 21vh;
       border-radius: 8px 8px 8px 8px;
       width: 40%;

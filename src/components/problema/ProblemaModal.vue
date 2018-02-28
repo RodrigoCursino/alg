@@ -15,7 +15,6 @@
             <!--Container-->
             <div class="modal-body">
               <fieldset class="my_fieldset">
-                {{verificarProblema}}
                 <input type="hidden" v-model="problema.id" value="0">
                 <div class="form-group">
                   <div class="input-group">
@@ -29,34 +28,12 @@
                     <small v-show="errors.has('titulo')" class="help text-danger">{{ errors.first('titulo') }}</small>
                   </div>
                 </div>
-
-                <div class="my_margin">
-                  <label><strong>Descrição do Problema</strong></label>
-                  <vue-editor
-                    id="descricao"
-                    v-model="problema.descricao"
-                    required="required"
-                  >
-                  </vue-editor>
-                </div>
-
-                <div class="my_margin">
-                  <label><strong>Descrição de Entrada do Problema</strong></label>
-                  <vue-editor
-                    id="descricaoEntrada"
-                    v-model="problema.descricaoEntrada"
-                  >
-                  </vue-editor>
-                </div>
-                {{verificarProblema}}
-                <div>
-                  <label><strong>Descrição de Saída do Problema</strong></label>
-                  <vue-editor
-                    id="descricaoSaida"
-                    v-model="problema.descricaoSaida"
-                  >
-                  </vue-editor>
-                </div>
+                <h6>Descrição</h6>
+                <wysiwyg class="my_margin" v-model="problema.descricao" />
+                <h6>Descrição Entrada</h6>
+                <wysiwyg class="my_margin" v-model="problema.descricaoEntrada" />
+                <h6>Descrição Saída</h6>
+                <wysiwyg v-model="problema.descricaoSaida" />
 
               </fieldset>
             </div>
@@ -135,15 +112,16 @@
           'modal-lg': this.large,
           'modal-sm': this.small
         }
-      },
-      verificarProblema () {
-        this.problemaRequisicao = Problema.BUILD_FORM(this.problema)
       }
     },
     created () {
       if (this.show) {
         document.body.className += ' modal-open'
       }
+      this.verificarProblema()
+    },
+    mounted () {
+      this.verificarProblema()
     },
     beforeDestroy () {
       document.body.className = document.body.className.replace(/\s?modal-open/, '')
@@ -152,6 +130,7 @@
       show (value) {
         if (value) {
           document.body.className += ' modal-open'
+          this.verificarProblema()
         } else {
           window.setTimeout(() => {
             document.body.className = document.body.className.replace(/\s?modal-open/, '')
@@ -161,17 +140,23 @@
     },
     methods: {
       ok () {
-        this.problemaRequisicao = ProblemaDao.submitForm(this.problemaRequisicao)
-        http.put('http://localhost:8084/alg-judge/rest/problema', this.problemaRequisicao).then(response => {
+        this.problemaRequisicao = ProblemaDao.SUBMIT_FORM(this.problema)
+        http.put('http://localhost:8084/alg-judge/rest/problema', this.problema).then(response => {
           this.$emit('ok')
           swal({
             title: 'Problema atualizado!',
             text: 'O problema foi editado com sucesso!!',
             icon: 'success',
             button: 'OK'
+          }).then(() => {
+            window.location.reload()
           })
           this.show = false
         })
+      },
+      verificarProblema () {
+        console.log('Problema Verificado')
+        this.problemaRequisicao = Problema.BUILD_FORM(this.problema)
       },
       cancel () {
         this.$emit('cancel')
@@ -240,7 +225,9 @@
       margin: 0 $modal-footer-btns-margin-x $modal-footer-btns-padding-bottom $modal-footer-btns-margin-x;
     }
   }
-
+  .my_margin {
+    margin-bottom: 15px;
+  },
   .modal-dialog {
     box-shadow: $modal-content-box-shadow-sm-up;
   }

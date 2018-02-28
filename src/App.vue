@@ -90,7 +90,7 @@
 <style lang="scss">
   @import "sass/main";
   .body_login {
-    background: url("./assets/img/background.jpg");
+    background: linear-gradient(-45deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2)), url("./assets/img/background.jpg");
     background-size: cover;
     height: 100%;
   }

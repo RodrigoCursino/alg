@@ -10,13 +10,13 @@
               :list="problemas"
               :per="pageTotal"
             >
-            <table class="table text-center table-striped first-td-padding">
+            <table class="table table-striped text-center">
               <thead>
               <tr>
                 <td>Título</td>
-                <div v-show="papel != 'Aluno'">
-                  <td>Edit</td>
-                  <td>Delete</td>
+                <div class="pull-right" v-show="papel != 'Aluno'">
+                  <td align="left"></td>
+                  <td></td>
                   <td align="right">Adicionar um Caso de Teste</td>
                 </div>
                 <td v-show="papel === 'Aluno'" align="right"></td>
@@ -25,7 +25,7 @@
               <tbody>
               <tr v-for="problema in paginated('problemas')">
                 <td>{{problema.titulo}}</td>
-                <div v-show="papel != 'Aluno'">
+                <div class="pull-right" v-show="papel != 'Aluno'">
                     <td>
                         <button @click="editProblema(problema)" class="btn btn-info btn-micro">
                           <div class="btn-with-icon-content">
@@ -66,30 +66,33 @@
               <button @click="proximo()" :disabled="pageP" type="button" class="btn btn-info">Próximo</button>
             </div>
           </div>
-            <problema-modal
+
+           <problema-modal
               :show.sync="show"
               :problema="problema"
               v-bind:large="true"
               ref="largeModal"
-              :okText="'modal.confirm' | translate" :cancelText="'modal.cancel' | translate"
+              okText="CONFIRMAR" cancelText="CANCELAR"
             >
               <div slot="title">Edit Problema</div>
               <div>
 
               </div>
             </problema-modal>
-            <caso-modal
+
+           <caso-modal
               :show.sync="show"
               :problema-id="problemaId"
               v-bind:large="true"
               ref="casoModal"
-              :okText="'modal.confirm' | translate" :cancelText="'modal.cancel' | translate"
+              okText="CONFIRMAR" cancelText="CANCELAR"
             >
             <div slot="title">Adicione um novo Caso de Teste</div>
             <div>
 
             </div>
           </caso-modal>
+
         </div>
       </div>
     </div>
@@ -99,6 +102,7 @@
 <script>
 
   import http from 'axios'
+  import Problema from '../../../model/Problema'
   import swal from 'sweetalert'
   import ProblemaModal from '../ProblemaModal'
   import CasoModal from './CasoModal'
@@ -164,7 +168,7 @@
       },
 
       editProblema (problema) {
-        this.problema = problema
+        this.problema = Problema.BUILD_FORM(problema)
         console.log('Problema Edit', this.problema)
         this.$refs.largeModal.open()
       },
@@ -217,5 +221,8 @@
   .chart-container {
     padding: 0 2rem;
     height: 24rem;
+  }
+  .centralizar {
+    text-align: right;
   }
 </style>
