@@ -2,9 +2,11 @@
   <div class="users-members-tab dashboard-tab">
     <div class="row">
       <div class="col-md-3 d-flex justify-content-center align-items-center">
-        <vuestic-profile-card :name="'Veronique Lee'" :location="'Malaga, Spain'" photoSource="http://i.imgur.com/NLrdqsk.png"
-                              :social="{twitter: 'twitter.com', facebook: 'facebook.com',
-                                  instagram: 'instagram.com'}">
+        <vuestic-profile-card
+          :name="this.$store.state.userState.user.nome"
+          :location="'Coxim, MS'"
+          photoSource="https://ascurso.com/wp-content/uploads/2018/01/Blank_Club_Website_Avatar_Gray.jpg"
+          :social="{}">
         </vuestic-profile-card>
       </div>
       <div class="col-md-9 d-flex">

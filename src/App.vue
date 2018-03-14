@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="app">
+    {{isAuth}}
     <layout v-if="token"></layout>
     <auth-layout v-else class="body_login" @logado="login" @cadastro="singUP"></auth-layout>
   </div>
@@ -28,7 +29,9 @@
     },
     computed: {
       isAuth () {
-        return this.$route.path.match('auth')
+        if (this.$store.state.userLogado === false) {
+          this.$router.replace('Login')
+        }
       }
     },
     watch: {

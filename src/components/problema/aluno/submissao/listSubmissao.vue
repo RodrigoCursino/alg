@@ -38,9 +38,9 @@
          </paginate>
        </div>
      </div>
-       <div class="row" v-show="mostrar">
+       <div class="row">
            <div class="col-lg-6 col-md-6 pull-left">
-             <button @click="voltar" class="btn btn-info">
+             <button v-show="mostrar" @click="voltar" class="btn btn-info">
                VOLTAR
              </button>
            </div>

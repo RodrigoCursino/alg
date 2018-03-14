@@ -2,10 +2,9 @@
   <div class="dashboard">
     <div class="row">
       <div class="col-md-12">
-        <div :class="papel === 'Professor'?'':'my_background'">
-          <aluno v-show="papel === 'Aluno'"></aluno>
-          <professor v-show="papel === 'Professor'"></professor>
-          <admin v-show="papel === 'Administrador'"></admin>
+        <div :class="papel === 'Aluno'?'my_background':''">
+          <aluno v-if="papel === 'Aluno'"></aluno>
+          <professor v-else></professor>
         </div>
       </div>
     </div>

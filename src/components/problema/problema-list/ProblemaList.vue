@@ -53,7 +53,7 @@
                   <button @click="submeterProblema(problema.id)" class="btn btn-success btn-micro">
                     <div class="btn-with-icon-content">
                       <i class="fa fa-eye"></i>
-                      <span class="">Vizualizar</span>
+                      <span class="">Visualizar</span>
                     </div>
                   </button>
                 </td>
