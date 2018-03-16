@@ -1,25 +1,6 @@
 <template>
   <div>
-    <aluno-dashboard v-if="papel === 'Aluno'"></aluno-dashboard>
-    <div v-else class="dashboard">
-
-      <vuestic-widget class="no-padding no-v-padding">
-        <vuestic-tabs :names="[$t('dashboard.usersAndMembers'), $t('dashboard.setupProfile'), $t('dashboard.features')]" ref="tabs">
-          <div :slot="$t('dashboard.usersAndMembers')">
-            <users-members-tab></users-members-tab>
-          </div>
-          <div :slot="$t('dashboard.setupProfile')">
-            <setup-profile-tab></setup-profile-tab>
-          </div>
-          <div :slot="$t('dashboard.features')">
-            <features-tab></features-tab>
-          </div>
-        </vuestic-tabs>
-      </vuestic-widget>
-
-      <dashboard-bottom-widgets></dashboard-bottom-widgets>
-
-    </div>
+    <aluno-dashboard></aluno-dashboard>
   </div>
 </template>
 

@@ -9,18 +9,18 @@ class Problema {
       descricaoSaida: problema.descricaoSaida ? problema.descricaoSaida : null
     }
     return data
-  };
-  static BUILD_PROBLEMA () {
+  }
+  static BUILD_PROBLEMA (problema) {
     const data = {
-      id: 1,
-      titulo: 'O Maior',
-      descricao: '<p>Faça um programa que leia dois valores inteiros e imprima o maior entre eles.</p>',
+      id: problema.id,
+      titulo: problema.titulo,
+      descricao: problema.descricao,
       ativo: true,
-      descricaoEntrada: '<p>A entrada consiste na leitura de dois valores inteiros.</p>',
-      descricaoSaida: '<p>Seu programa deve escrever na tela o maior valor entre os dois valores lidos conforme os exemplos fornecidos.</p>'
+      descricaoEntrada: problema.descricaoEntrada,
+      descricaoSaida: problema.descricaoSaida
     }
     return data
-  };
+  }
 }
 
 export default Problema

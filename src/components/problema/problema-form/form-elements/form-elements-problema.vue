@@ -338,7 +338,6 @@
         this.salvarCasoDeTeste(this.casoDeTeste)
       },
       salvarCasoDeTeste (casoDeTeste) {
-        debugger
         const data = CasoDeTesteDao.submitForm(casoDeTeste)
         if (data.id === 0) {
           http.post('http://localhost:8084/alg-judge/rest/casodeteste', data).then(

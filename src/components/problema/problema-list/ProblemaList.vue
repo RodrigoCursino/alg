@@ -19,7 +19,7 @@
                   <td></td>
                   <td align="right">Adicionar um Caso de Teste</td>
                 </div>
-                <td v-show="papel === 'Aluno'" align="right"></td>
+                <td align="right"></td>
               </tr>
               </thead>
               <tbody>
@@ -41,7 +41,7 @@
                       </button>
                     </td>
                     <td align="right" style="text-align:right">
-                      <button @click="addCasoDeTeste(problema.id)" class="btn btn-primary btn-micro">
+                      <button @click="addCasoDeTeste(problema)" class="btn btn-primary btn-micro">
                         <div class="btn-with-icon-content">
                           <span aria-hidden="true" class="fa fa-plus" style="font-size: 12px;"></span>
                           adicionar
@@ -49,7 +49,7 @@
                       </button>
                     </td>
                 </div>
-                <td v-show="papel === 'Aluno'" align="right" style="text-align:right">
+                <td align="right" style="text-align:right">
                   <button @click="submeterProblema(problema.id)" class="btn btn-success btn-micro">
                     <div class="btn-with-icon-content">
                       <i class="fa fa-eye"></i>
@@ -83,6 +83,7 @@
            <caso-modal
               :show.sync="show"
               :problema-id="problemaId"
+              :problema="problema"
               v-bind:large="true"
               ref="casoModal"
               okText="CONFIRMAR" cancelText="CANCELAR"
@@ -179,6 +180,7 @@
       },
       addCasoDeTeste (id) {
         this.problemaId = id
+        this.problema = id
         this.$refs.casoModal.open()
       },
 

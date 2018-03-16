@@ -1,5 +1,6 @@
 <template>
   <transition name="modal" :duration="duration">
+    {{verificarCasos}}
     <div v-show="show" class="modal-container">
       <div class="modal" @click.self="clickMask">
         <div class="modal-dialog" :class="modalClass">
@@ -14,73 +15,12 @@
             </div>
             <!--Container-->
             <div class="modal-body">
-
-              {{verificarCasos}}
-
-              <caso-de-teste-list @editCaso="editarCasoDeTeste" :casos="casos"></caso-de-teste-list>
-
-              <fieldset class="my_fieldset my_margin">
-                <div class="form-group">
-                  <div class="input-group">
-                    <input v-model="casoDeTeste.saida"
-                           v-validate="'required'"
-                           :class="{'input': true, 'is-danger': errors.has('saida') }"
-                           id="saida"
-                           name="saida" required="required">
-                    <label for="saida" class="control-label">DIGITE UMA SAÍDA PARA O CASO DE TESTE</label>
-                    <i class="bar"></i>
-                    <small v-show="errors.has('saida')" class="help text-danger">{{ errors.first('saida') }}</small>
-                  </div>
-                </div>
-
-                <div class="form-group form-group-w-btn">
-                  <div class="input-group">
-                    <input id="input-w-btn-round"
-                           v-model="caso"
-                           required/>
-                    <label class="control-label" for="input-w-btn-round">
-                      DIGITE UMA ENTRADA PARA O CASO DE TESTE
-                    </label>
-                    <i class="bar"></i>
-                  </div>
-                  <div @click="addEntrada(caso)" class="btn btn-primary btn-with-icon btn-micro rounded-icon">
-                    <div class="btn-with-icon-content">
-                      <i aria-hidden="true"
-                         class="fa fa-plus"
-                         style="font-size: 26px; text-align: center;">
-                      </i>
-                    </div>
-                  </div>
-                </div>
-
-                <div v-if="entradas.length > 0" class="text-center my_margin">
-                  <span class="text-danger my_danger my_margin">CLICK PARA DELETAR ALGUMA ENTRADA</span> <br>
-                  <b-button-group style="margin-top: 10px">
-                    <b-button @click="delEntrada(e)" v-for="e in entradas" :key="e">{{e}}</b-button>
-                  </b-button-group>
-                </div>
-
-                <div class="text-center">
-                  <vuestic-switch v-model="casoDeTeste.exemplo">
-                    <span slot="trueTitle">COM EXEMPLO</span>
-                    <span slot="falseTitle">SEM EXEMPLO</span>
-                  </vuestic-switch>
-                </div>
-
-              </fieldset>
-
-              <button  @click="salvar" class="btn btn-primary btn-micro text-center">
-                <div class="btn-with-icon-content">
-                  <span aria-hidden="true" class="fa fa-plus" style="font-size: 12px;"></span>
-                  adicionar
-                </div>
-              </button>
-
+              <caso-de-teste-form v-show="problema" :show="show" :casos-array="casos" :problema="problema"></caso-de-teste-form>
             </div>
             <!--Footer-->
             <div class="modal-footer">
               <slot name="footer">
-                <button type="button" :disabled="entradas.length = 0" :class="okClass" @click="ok">{{okText}}</button>
+                <button type="button" :disabled="vetorDeEntradas.length = 0" :class="okClass" @click="ok">{{okText}}</button>
                 <button type="button" :class="cancelClass" @click="cancel">{{cancelText}}</button>
               </slot>
             </div>
@@ -96,8 +36,8 @@
   import http from 'axios'
   import CasoDeTeste from '../../../model/CasoDeTeste'
   import CasoDeTesteDao from '../../../dao/CasoDeTesteDao'
+  import CasoDeTesteForm from '../../casos/CasoDeTesteForm'
   import ProblemaDao from '../../../dao/ProblemaDao'
-  import Problema from '../../../model/Problema'
   import CasoDeTesteList from '../problema-form/form-elements/caso-de-teste-list'
 
   export default {
@@ -108,6 +48,7 @@
         default: 'modal'
       },
       problemaId: {required: true},
+      problema: {required: true},
       small: {
         type: Boolean,
         default: false
@@ -138,16 +79,16 @@
       }
     },
     components: {
-      CasoDeTesteList
+      CasoDeTesteList,
+      CasoDeTesteForm
     },
     data () {
       return {
         show: false,
         casos: [],
         caso: '',
-        entradas: [],
+        vetorDeEntradas: [],
         casoDeTeste: new CasoDeTeste(),
-        problema: new Problema(),
         duration: 500
       }
     },
@@ -161,8 +102,7 @@
       verificarCasos () {
         if (this.show) {
           this.casoDeTeste = CasoDeTeste.BUILD_FORM(this.casoDeTeste)
-          this.getProblema(this.problemaId)
-          this.getCasos()
+          this.getCasos(this.problema.id)
         }
       }
     },
@@ -203,14 +143,33 @@
       open () {
         this.show = true
       },
+      addEntrada (entrada) {
+        this.vetorDeEntradas.push(entrada)
+        this.caso = ''
+      },
+      delEntrada (entrada) {
+        this.vetorDeEntradas.splice(this.findIndex(entrada), 1)
+      },
+      findIndex (index) {
+        return this.vetorDeEntradas.findIndex((_entrada) => {
+          return _entrada === index
+        })
+      },
+      editarCasoDeTeste (caso) {
+        this.casoDeTeste = caso
+        this.getEntradas(this.casoDeTeste.entrada)
+      },
+      getEntradas (entrada) {
+        this.vetorDeEntradas = entrada.split('\n')
+      },
       salvar () {
         this.casoDeTeste.entrada = ''
 
-        for (let entrada in this.entradas) {
-          if (entrada < this.entradas.length - 1) {
-            this.casoDeTeste.entrada += this.entradas[entrada] + '\n'
+        for (let entrada in this.vetorDeEntradas) {
+          if (entrada < this.vetorDeEntradas.length - 1) {
+            this.casoDeTeste.entrada += this.vetorDeEntradas[entrada] + '\n'
           } else {
-            this.casoDeTeste.entrada += this.entradas[entrada]
+            this.casoDeTeste.entrada += this.vetorDeEntradas[entrada]
           }
         }
         this.casoDeTeste.problema = ProblemaDao.SUBMIT_FORM(this.casoDeTeste.problema)
@@ -218,10 +177,10 @@
       },
       salvarCasoDeTeste (casoDeTeste) {
         const data = CasoDeTesteDao.submitForm(casoDeTeste)
-        debugger
         if (data.id === 0) {
           http.post('http://localhost:8084/alg-judge/rest/casodeteste', data).then(
             response => {
+              console.log('Casos De Teste Salvo', response.data.data)
               casoDeTeste.id = response.data.data.id
               this.casos.push(casoDeTeste)
               this.clean()
@@ -235,50 +194,25 @@
               this.casos.push(casoDeTeste)
               this.clean()
             }
-          )
+          ).catch(erro => {
+            console.log('Erro', erro)
+          })
         }
       },
-      editarCasoDeTeste (caso) {
-        this.casoDeTeste = caso
-        this.getEntradas(this.casoDeTeste.entrada)
-      },
-      getEntradas (entrada) {
-        this.entradas = entrada.split('\n')
-      },
-      addEntrada (entrada) {
-        this.entradas.push(entrada)
-        this.caso = ''
-      },
-      delEntrada (entrada) {
-        this.entradas.splice(this.findIndex(entrada), 1)
-      },
-      findIndex (index) {
-        return this.entradas.findIndex((_entrada) => {
-          return _entrada === index
-        })
-      },
       clean () {
-        this.entradas = []
+        this.vetorDeEntradas = []
         this.casoDeTeste = new CasoDeTeste()
         this.casoDeTeste.id = 0
         this.casoDeTeste = CasoDeTeste.BUILD_FORM(this.casoDeTeste)
         this.casoDeTeste.problema = this.problema
-        this.getCasos()
       },
       getProblema (id) {
         http.get('http://localhost:8084/alg-judge/rest/problema/' + id).then(response => {
-          this.problema = response.data.data
-          this.problema = ProblemaDao.SUBMIT_FORM(this.problema)
+          this.problema = ProblemaDao.SUBMIT_FORM(response.data.data)
           this.casoDeTeste.problema = this.problema
-          console.log('Get Problema', response)
+          this.getCasos(this.problema.id)
+          console.log('Get Problema', this.problema)
         })
-      },
-      getCasos () {
-        http.get('http://localhost:8084/alg-judge/rest/casodeteste/listarcasos/' + this.problemaId)
-          .then(response => {
-            this.casos = response.data.data
-            console.log('Casos De Teste', response.data.data)
-          })
       },
       delCasos (caso) {
         this.casos.splice(this.findIndexCasos(caso), 1)
@@ -287,6 +221,13 @@
         return this.casos.findIndex((_caso) => {
           return _caso.id === index.id
         })
+      },
+      getCasos (id) {
+        http.get('http://localhost:8084/alg-judge/rest/casodeteste/listarcasos/' + id)
+          .then(response => {
+            this.casos = response.data.data
+            console.log('Casos De Teste', response.data.data)
+          })
       }
     }
   }
