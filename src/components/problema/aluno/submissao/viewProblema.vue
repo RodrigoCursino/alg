@@ -45,7 +45,7 @@
           <tbody>
           <tr v-for="exemplo in problema.exemplos">
             <td><div v-html="repleceEntrada(exemplo.entrada)"></div></td>
-            <td>{{exemplo.saida}}</td>
+            <td><div v-html="getSaidas(exemplo.saida)"></div></td>
           </tr>
           </tbody>
         </table>
@@ -67,10 +67,31 @@
       props: {
         problema: {required: true}
       },
+      data () {
+        return {
+          saidas: [],
+          entradas: []
+        }
+      },
+      created () {
+        console.log('Problema View')
+      },
       methods: {
-        repleceEntrada (entrada) {
-          console.log(entrada.replace(/\n/g, '<br>'))
-          return entrada.replace(/\n/g, '<br>')
+        getSaida (entrada) {
+          this.saidas = entrada.split('\n')
+          return this.saidas
+        },
+        getEntrada (entrada) {
+          this.entradas = entrada.split('\n')
+          return this.entradas
+        },
+        repleceEntrada (saida) {
+          console.log(saida.replace(/\n/g, '<br>'))
+          return saida.replace(/\n/g, '<br>')
+        },
+        getSaidas (saida) {
+          console.log(saida.replace(/\n/g, '<br>'))
+          return saida.replace(/\n/g, '<br>')
         },
         enviar () {
           this.$emit('showPanel')

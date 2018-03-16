@@ -29,8 +29,8 @@
     },
     computed: {
       isAuth () {
-        if (this.$store.state.userLogado === false) {
-          this.$router.replace('Login')
+        if (!this.$store.state.userLogado) {
+          this.$router.match('Login')
         }
       }
     },

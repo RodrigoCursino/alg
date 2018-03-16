@@ -4,12 +4,6 @@
       <div class="col-lg-12 col-md-12">
         <div class="container">
           <div class="table-responsive">
-            <paginate
-              ref="paginator"
-              name="problemas"
-              :list="problemas"
-              :per="pageTotal"
-            >
             <table class="table table-striped text-center">
               <thead>
               <tr>
@@ -23,7 +17,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="problema in paginated('problemas')">
+              <tr v-for="problema in problemas">
                 <td>{{problema.titulo}}</td>
                 <div class="pull-right" v-show="papel != 'Aluno'">
                     <td>
@@ -60,7 +54,6 @@
               </tr>
               </tbody>
             </table>
-            </paginate>
             <div role="group" aria-label="First group" class="btn-group pull-right">
               <button @click="anterior()" :disabled="pageA" type="button" class="btn btn-info">Anterior</button>
               <button @click="proximo()" :disabled="pageP" type="button" class="btn btn-info">Próximo</button>
@@ -126,25 +119,29 @@
         problemas: [],
         paginate: ['problemas'],
         page: 1,
-        pageTotal: 5,
         pageP: false,
         pageA: true,
-        total: 0,
         problema: '',
         problemaId: '',
         show: false
       }
     },
     mounted () {
-      this.getAll()
+      this.getAll(this.page)
     },
     methods: {
-      getAll () {
-        http.get('http://localhost:8084/alg-judge/rest/problema/list'
+      getAll (page) {
+        http.get('http://localhost:8084/alg-judge/rest/problema/list/' + page
         ).then(response => {
           console.log('Response Problem List', response.data.data)
           this.problemas = response.data.data
-          this.quantidadeDePag()
+          console.log('page', this.page, this.problemas.length)
+          if (this.problemas.length < 10) {
+            this.pageP = true
+            this.pageA = false
+          } else {
+            this.pageP = false
+          }
         })
       },
 
@@ -186,29 +183,23 @@
 
       delete (id) {
         http.put('http://localhost:8084/alg-judge/rest/problema/delete/' + id).then(response => {
-          this.getAll()
+          this.getAll(this.page)
         })
       },
       proximo () {
-        if (this.page <= this.total) {
-          this.page++
-          this.pageA = false
-          this.$refs.paginator.goToPage(this.page)
-        } else {
-          this.pageP = true
-        }
+        this.page ++
+        console.log('Proximo', this.page)
+        this.getAll(this.page)
       },
       anterior () {
-        if (this.page > 1) {
-          this.page--
-          this.pageP = false
-          this.$refs.paginator.goToPage(this.page)
+        this.page--
+        console.log('Anterior', this.page)
+        if (this.page !== 0) {
+          this.getAll(this.page)
         } else {
+          this.page++
           this.pageA = true
         }
-      },
-      quantidadeDePag () {
-        this.total = (this.problemas.length) / this.pageTotal
       }
     }
   }

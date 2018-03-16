@@ -19,8 +19,8 @@
   import ProblemaForm from '../problema-form/ProblemaForm'
   import FormElementsProblema from '../problema-form/form-elements/form-elements-problema'
   import ProblemaList from '../problema-list/ProblemaList'
-  import Submissao from './submissao/Submissao'
-  import PainelSubmissao from './submissao/painelSubmissao'
+  import Submissao from '../aluno/submissao/Submissao'
+  import PainelSubmissao from '../aluno/submissao/painelSubmissao'
   export default {
     name: 'professor',
     components: {
