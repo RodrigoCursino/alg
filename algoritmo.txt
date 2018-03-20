@@ -1,3 +1,5 @@
+-- O Maior
+
 algoritmo
 declare num1, num2 numerico
 leia num1
@@ -8,4 +10,13 @@ se num2 > num1 entao
 escreva "O maior número é: ", num2
 se num1 = num2 entao
 escreva "Os números são iguais"
+fim_algoritmo.
+
+-- A Soma
+
+algoritmo
+declare num1, num2 numerico
+leia num1
+leia num2
+escreva "a soma é igual a ", num1+num2
 fim_algoritmo.
